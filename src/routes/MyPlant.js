@@ -1,17 +1,21 @@
-import { Box, Button, Flex, Image, Skeleton, Stack, Text, VStack, useQuery } from "@chakra-ui/react";
+import { Box, Flex, Skeleton, Text, useQuery } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { getData } from "../api";
 
 export default function MyPlant() {
     const stramUrl = "http://175.123.202.85:20800/stream.mjpg";
-    const [datas, setDatas] = useState();
-    const { isLoading, data } = useQuery(["datas"], getData);
+    const [isLoading, setIsLoading] = useState(true);
+    const [datas, setDatas] = useState([]);
+    const fetchData = async () => {
+      const response = await fetch("http://localhost:8081/api/udp/sensor");
+      const json = await response.json();
+      setDatas(json.sensorData);
+      setIsLoading(false);
+    }
     
     useEffect(() => {
-        fetch("http://localhost:8081/api/udp/sensor")
-          .then((response) => response.json())
-          .then((json) => {setDatas(json);})
-      }, [])
+        fetchData();
+      }, []);
       console.log(datas);
     
       return (
@@ -25,10 +29,10 @@ export default function MyPlant() {
                 <>
                   <Skeleton height='20px' />
                 </>
-              ) : null}
-            {datas?.sensorData.map((data)=>(
-              <li>{data}</li>
-            ))}
+              ) : datas?.map((data) => (
+                <Text>{data}</Text>
+              ))}
+            
             </Box>
           </Flex>
         </>

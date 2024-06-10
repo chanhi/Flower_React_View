@@ -65,7 +65,7 @@ export default function Header() {
             textAlign={useBreakpointValue({ base: 'center', md: 'left' })}
             fontFamily={'heading'}
             color={useColorModeValue('gray.800', 'white')}>
-            <a href='/'>Logo</a>
+            <a href='/'>M.G.M</a>
           </Text>
 
           <Flex display={{ base: 'none', md: 'flex' }} ml={10}>
@@ -264,7 +264,7 @@ const NAV_ITEMS = [
       {
         label: '자유게시판',
         subLabel: 'Trending Design to inspire you',
-        href: '#',
+        href: "/board/main",
       },
       {
         label: '공지사항',

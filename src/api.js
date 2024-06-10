@@ -11,3 +11,11 @@ export const getData = () =>
     instance
         .get("udp/sensor")  
         .then((response) => response.data);
+
+export const uploadBoard = (variables) =>
+    instance.post(`posts/new`, variables, {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    .then((response) => response.data);

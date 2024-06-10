@@ -10,8 +10,10 @@ import {
   TableContainer,
   Divider,
   Box,
+  Button,
 } from '@chakra-ui/react';
 import { useEffect, useState } from "react";
+import { Link } from 'react-router-dom';
 
 
 export default function Home() {
@@ -22,73 +24,70 @@ export default function Home() {
         <Table variant='simple'>
           <Thead>
             <Tr>
-              <Th>To convert</Th>
-              <Th>into</Th>
-              <Th isNumeric>multiply by</Th>
+              <Th>No.</Th>
+              <Th>제목</Th>
+              <Th>작성자</Th>
+              <Th isNumeric>날짜</Th>
             </Tr>
           </Thead>
           <Tbody>
             <Tr>
-              <Td>inches</Td>
-              <Td>millimetres (mm)</Td>
-              <Td isNumeric>25.4</Td>
+              <Td>00001</Td>
+              <Td>게시글 제목1</Td>
+              <Td>ㅁㅁㅁ</Td>
+              <Td isNumeric>2024-06-13</Td>
             </Tr>
             <Tr>
-              <Td>feet</Td>
-              <Td>centimetres (cm)</Td>
-              <Td isNumeric>30.48</Td>
+              <Td>00001</Td>
+              <Td>게시글 제목1</Td>
+              <Td>ㅁㅁㅁ</Td>
+              <Td isNumeric>2024-06-13</Td>
             </Tr>
             <Tr>
-              <Td>yards</Td>
-              <Td>metres (m)</Td>
-              <Td isNumeric>0.91444</Td>
+              <Td>00001</Td>
+              <Td>게시글 제목1</Td>
+              <Td>ㅁㅁㅁ</Td>
+              <Td isNumeric>2024-06-13</Td>
             </Tr>
           </Tbody>
-          <Tfoot>
-            <Tr>
-              <Th>To convert</Th>
-              <Th>into</Th>
-              <Th isNumeric>multiply by</Th>
-            </Tr>
-          </Tfoot>
         </Table>
       </TableContainer>
+      <Link to="/board/post">
+        <Button>게시글 등록</Button> 
+      </Link>
 
-      <Divider height={10} />
+      <Divider height={20} />
 
       <TableContainer>
         <Table variant='simple'>
           <Thead>
             <Tr>
-              <Th>To convert</Th>
-              <Th>into</Th>
-              <Th isNumeric>multiply by</Th>
+              <Th>No.</Th>
+              <Th>제목</Th>
+              <Th>작성자</Th>
+              <Th isNumeric>날짜</Th>
             </Tr>
           </Thead>
           <Tbody>
             <Tr>
-              <Td>inches</Td>
-              <Td>millimetres (mm)</Td>
-              <Td isNumeric>25.4</Td>
+              <Td>00001</Td>
+              <Td>게시글 제목1</Td>
+              <Td>ㅁㅁㅁ</Td>
+              <Td isNumeric>2024-06-13</Td>
             </Tr>
             <Tr>
-              <Td>feet</Td>
-              <Td>centimetres (cm)</Td>
-              <Td isNumeric>30.48</Td>
+              <Td>00001</Td>
+              <Td>게시글 제목1</Td>
+              <Td>ㅁㅁㅁ</Td>
+              <Td isNumeric>2024-06-13</Td>
             </Tr>
             <Tr>
-              <Td>yards</Td>
-              <Td>metres (m)</Td>
-              <Td isNumeric>0.91444</Td>
+              <Td>00001</Td>
+              <Td>게시글 제목1</Td>
+              <Td>ㅁㅁㅁ</Td>
+              <Td isNumeric>2024-06-13</Td>
             </Tr>
           </Tbody>
-          <Tfoot>
-            <Tr>
-              <Th>To convert</Th>
-              <Th>into</Th>
-              <Th isNumeric>multiply by</Th>
-            </Tr>
-          </Tfoot>
         </Table>
       </TableContainer>
     </Box>

@@ -3,6 +3,8 @@ import Root from "./components/Root";
 import Home from "./routes/Home";
 import MyPlant from "./routes/MyPlant";
 import SignUp from "./routes/SignUp";
+import BoardPost from "./routes/BoardPost";
+import BoardMain from "./routes/BoardMain";
 
 const router = createBrowserRouter([
     {
@@ -20,6 +22,19 @@ const router = createBrowserRouter([
             {
                 path: "signup",
                 element: <SignUp />
+            },
+            {
+                path: "board",
+                children: [
+                    {
+                        path: "post",
+                        element: <BoardPost />
+                    },
+                    {
+                        path: "main",
+                        element: <BoardMain />
+                    },
+                ]
             },
         ]
     }
