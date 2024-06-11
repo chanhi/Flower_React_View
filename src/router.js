@@ -5,6 +5,8 @@ import MyPlant from "./routes/MyPlant";
 import SignUp from "./routes/SignUp";
 import BoardPost from "./routes/BoardPost";
 import BoardMain from "./routes/BoardMain";
+import MypageEdit from "./routes/MypageEdit";
+import MypageMain from "./routes/MypageMain";
 
 const router = createBrowserRouter([
     {
@@ -22,6 +24,23 @@ const router = createBrowserRouter([
             {
                 path: "signup",
                 element: <SignUp />
+            },
+            {
+                path: "mypage",
+                children: [
+                    {
+                        path: "edit",
+                        element: <MypageEdit />
+                    },
+                    {
+                        path: "main",
+                        element: <MypageMain />
+                    },
+                    {
+                        path: "friends",
+                        element: <MypageEdit />
+                    },
+                ]
             },
             {
                 path: "board",

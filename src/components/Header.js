@@ -289,11 +289,7 @@ const NAV_ITEMS = [
     ],
   },
   {
-    label: 'Learn Design',
-    href: '#',
-  },
-  {
-    label: 'Hire Designers',
-    href: '#',
+    label: '마이페이지',
+    href: 'mypage/main',
   },
 ];

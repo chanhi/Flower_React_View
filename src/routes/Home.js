@@ -2,23 +2,21 @@ import {
   Table,
   Thead,
   Tbody,
-  Tfoot,
   Tr,
   Th,
   Td,
-  TableCaption,
   TableContainer,
   Divider,
   Box,
   Button,
+  HStack,
 } from '@chakra-ui/react';
-import { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
 
 
 export default function Home() {
   return (
-    <Box>
+    <Box m={10}>
       
       <TableContainer>
         <Table variant='simple'>
@@ -52,9 +50,11 @@ export default function Home() {
           </Tbody>
         </Table>
       </TableContainer>
-      <Link to="/board/post">
-        <Button>게시글 등록</Button> 
-      </Link>
+      <HStack justifyContent="end">
+        <Link to="/board/post">
+          <Button>게시글 등록</Button> 
+        </Link>
+      </HStack>
 
       <Divider height={20} />
 
@@ -63,7 +63,7 @@ export default function Home() {
           <Thead>
             <Tr>
               <Th>No.</Th>
-              <Th>제목</Th>
+              <Th>게시글</Th>
               <Th>작성자</Th>
               <Th isNumeric>날짜</Th>
             </Tr>
