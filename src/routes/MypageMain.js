@@ -26,8 +26,7 @@ import HeatMap from 'react-heatmap-grid'
     .map(() =>
         new Array(xLabels.length).fill(0).map(() => Math.floor(Math.random() * 100))
     );
-
-
+    //---------------마이페이지 메인--------------------
     return (
       <Box m={20}>
         <Text mt={10}>내가 쓴 게시글</Text>

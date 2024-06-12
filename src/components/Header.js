@@ -34,7 +34,7 @@ export default function Header() {
     onClose: onLoginClose,
     onOpen: onLoginOpen,
   } = useDisclosure();
-
+  //---------------헤더--------------------
   return (
     <Box>
       <Flex

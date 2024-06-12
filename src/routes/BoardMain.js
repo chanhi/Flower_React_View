@@ -1,7 +1,21 @@
 import { Button, Center, Stack, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function BoardMain() {
+    const [isLoading, setIsLoading] = useState(true);
+    const [datas, setDatas] = useState([]);
+    const fetchData = async () => {
+      const response = await fetch("http://localhost:8081/api/posts");
+      const json = await response.json();
+      setDatas(json);
+      setIsLoading(false);
+    }
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+    //---------------게시글 리스트 페이지--------------------
     return(
         <Stack>
             <TableContainer>
@@ -15,24 +29,17 @@ export default function BoardMain() {
                     </Tr>
                 </Thead>
                 <Tbody>
-                    <Tr>
-                    <Td>00001</Td>
-                    <Td>게시글 제목1</Td>
-                    <Td>ㅁㅁㅁ</Td>
-                    <Td isNumeric>2024-06-13</Td>
-                    </Tr>
-                    <Tr>
-                    <Td>00001</Td>
-                    <Td>게시글 제목1</Td>
-                    <Td>ㅁㅁㅁ</Td>
-                    <Td isNumeric>2024-06-13</Td>
-                    </Tr>
-                    <Tr>
-                    <Td>00001</Td>
-                    <Td>게시글 제목1</Td>
-                    <Td>ㅁㅁㅁ</Td>
-                    <Td isNumeric>2024-06-13</Td>
-                    </Tr>
+                    {datas.map((data)=>(
+                        <Tr>
+                        <Td>{data.id}</Td>
+                        <Td>
+                            <Link to="/board/show">{data.title}</Link>
+                            {/*아이디 기준으로 해당 게시글로 이동하도록 prop 설정해야 됨*/}
+                        </Td>
+                        <Td>{data.userid}</Td>
+                        <Td isNumeric>{data.regdate}</Td>
+                        </Tr>
+                    ))}
                 </Tbody>
                 </Table>
             </TableContainer>

@@ -4,19 +4,12 @@ import {
     FormControl,
     FormLabel,
     Input,
-    InputGroup,
-    HStack,
-    InputRightElement,
     Stack,
     Button,
-    Heading,
     Text,
     useColorModeValue,
-    Link,
     Textarea,
   } from '@chakra-ui/react';
-  import { useState } from 'react';
-  import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
@@ -35,6 +28,7 @@ export default function BoardPost() {
         console.log(data);
         mutation.mutate(data);
     };  
+    //---------------게시글 등록 페이지--------------------
     return (
       <Flex
         minH={'100vh'}
@@ -79,6 +73,18 @@ export default function BoardPost() {
                 <Input
                     value="1"
                     {...register("id")}
+                />
+              </FormControl>
+              <FormControl>
+                <Input
+                    value="1"
+                    {...register("likeCount")}
+                />
+              </FormControl>
+              <FormControl>
+                <Input
+                    value="1"
+                    {...register("count")}
                 />
               </FormControl>
               <Stack spacing={10} pt={2}>

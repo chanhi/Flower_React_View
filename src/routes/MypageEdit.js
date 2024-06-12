@@ -19,7 +19,7 @@ import {
 
 export default function MypageEdit() {
     const [showPassword, setShowPassword] = useState(false);
-  
+    //---------------내 정보 수정 페이지--------------------
     return (
       <Flex
         minH={'100vh'}

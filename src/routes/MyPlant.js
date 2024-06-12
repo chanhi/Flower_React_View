@@ -1,9 +1,8 @@
-import { Box, Flex, Skeleton, Text, useQuery } from "@chakra-ui/react";
+import { Box, Flex, Skeleton, Stack} from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { getData } from "../api";
+import MyplantController from "../components/MyplantController";
 
 export default function MyPlant() {
-    const stramUrl = "http://175.123.202.85:20800/stream.mjpg";
     const [isLoading, setIsLoading] = useState(true);
     const [datas, setDatas] = useState([]);
     const fetchData = async () => {
@@ -15,23 +14,22 @@ export default function MyPlant() {
     
     useEffect(() => {
         fetchData();
-      }, []);
-      console.log(datas);
-    
+    }, []);
+    //---------------내 식물 페이지--------------------
       return (
         <>
-          <Flex>
-            <Box bgColor={"green.400"}>
-              <img src="http://175.123.202.85:20800/stream.mjpg" />
-            </Box>
+          <Flex p={10}>
+            <Stack alignItems="center" justifyContent="center" mr={10}>
+              <Box bgColor={"green.400"} w="100%">
+                <img src="http://175.123.202.85:20800/stream.mjpg" alt="" />
+              </Box>
+            </Stack>
             <Box width={200} height={200}>
               {isLoading ? (
                 <>
                   <Skeleton height='20px' />
                 </>
-              ) : datas?.map((data) => (
-                <Text>{data}</Text>
-              ))}
+              ) : <MyplantController datas={datas} />}
             
             </Box>
           </Flex>

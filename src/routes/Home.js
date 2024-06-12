@@ -15,6 +15,7 @@ import { Link } from 'react-router-dom';
 
 
 export default function Home() {
+  //---------------메인 페이지--------------------
   return (
     <Box m={10}>
       

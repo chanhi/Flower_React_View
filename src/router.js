@@ -7,7 +7,9 @@ import BoardPost from "./routes/BoardPost";
 import BoardMain from "./routes/BoardMain";
 import MypageEdit from "./routes/MypageEdit";
 import MypageMain from "./routes/MypageMain";
+import BorderShow from "./routes/BorderShow";
 
+//---------------라우터 여기서 url에 따라 라우팅--------------------
 const router = createBrowserRouter([
     {
         path: "/",
@@ -52,6 +54,10 @@ const router = createBrowserRouter([
                     {
                         path: "main",
                         element: <BoardMain />
+                    },
+                    {
+                        path: "show",
+                        element: <BorderShow />
                     },
                 ]
             },
