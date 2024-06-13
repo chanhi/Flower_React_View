@@ -56,7 +56,7 @@ const router = createBrowserRouter([
                         element: <BoardMain />
                     },
                     {
-                        path: "show",
+                        path: "show/:boardId",
                         element: <BorderShow />
                     },
                 ]

@@ -1,13 +1,15 @@
-import { Box, Flex, Heading, Stack, Text, useColorModeValue } from "@chakra-ui/react";
+import { Box, Flex, Stack, Text, useColorModeValue } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 export default function BorderShow() {
     const [isLoading, setIsLoading] = useState(true);
     const [datas, setDatas] = useState([]);
+    const {boardId} = useParams();
     const fetchData = async () => {
       const response = await fetch("http://localhost:8081/api/posts");
       const json = await response.json();
-      setDatas(json[0]);
+      setDatas(json[boardId - 1]);
       setIsLoading(false);
     }
 

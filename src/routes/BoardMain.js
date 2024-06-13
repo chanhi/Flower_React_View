@@ -14,7 +14,7 @@ export default function BoardMain() {
 
     useEffect(() => {
         fetchData();
-    }, [datas]);
+    }, []);
     //---------------게시글 리스트 페이지--------------------
     return(
         <Stack>
@@ -33,7 +33,7 @@ export default function BoardMain() {
                         <Tr>
                         <Td>{data.id}</Td>
                         <Td>
-                            <Link to="/board/show">{data.title}</Link>
+                            <Link to={`/board/show/${data.id}`}>{data.title}</Link>
                             {/*아이디 기준으로 해당 게시글로 이동하도록 prop 설정해야 됨*/}
                         </Td>
                         <Td>{data.userid}</Td>
