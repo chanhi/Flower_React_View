@@ -14,7 +14,7 @@ export default function BoardMain() {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [datas]);
     //---------------게시글 리스트 페이지--------------------
     return(
         <Stack>
@@ -29,7 +29,7 @@ export default function BoardMain() {
                     </Tr>
                 </Thead>
                 <Tbody>
-                    {datas.map((data)=>(
+                    {datas?.map((data)=>(
                         <Tr>
                         <Td>{data.id}</Td>
                         <Td>

@@ -20,12 +20,10 @@ export default function BoardPost() {
     const navigate = useNavigate();
     const mutation = useMutation(uploadBoard, {
         onSuccess: (data) => {
-            console.log(data);
-            navigate('/board/main');
+            navigate('/board/main', {replace: true});
         }
     })
     const onSubmit = (data) => {
-        console.log(data);
         mutation.mutate(data);
     };  
     //---------------게시글 등록 페이지--------------------
@@ -69,12 +67,7 @@ export default function BoardPost() {
                     {...register("content", {required: true})}
                 />
               </FormControl>
-              <FormControl>
-                <Input
-                    value="1"
-                    {...register("id")}
-                />
-              </FormControl>
+              
               <FormControl>
                 <Input
                     value="1"
