@@ -25,6 +25,8 @@ import {
   SunIcon,
 } from '@chakra-ui/icons';
 import LoginModal from './LoginModal';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { getMe, logOut } from '../api';
 
 export default function Header() {
   const { isOpen, onToggle } = useDisclosure();
@@ -34,6 +36,18 @@ export default function Header() {
     onClose: onLoginClose,
     onOpen: onLoginOpen,
   } = useDisclosure();
+  const {isLoading, data} = useQuery(["me"], getMe, {
+    refetchOnWindowFocus: false
+  });
+  const mutation = useMutation(logOut, {
+    onSuccess: () => {
+      window.location.replace("/");
+    }
+  })
+  const onLogout = async () => {
+    mutation.mutate();
+  }
+  //console.log(!isLoading?data:null);
   //---------------헤더--------------------
   return (
     <Box>
@@ -69,10 +83,13 @@ export default function Header() {
           </Text>
 
           <Flex display={{ base: 'none', md: 'flex' }} ml={10}>
-            <DesktopNav />
+            <DesktopNav role={!isLoading ? (
+              data ? data.role : null 
+            ): null} />
           </Flex>
         </Flex>
 
+        {!data ? 
         <Stack
           flex={{ base: 1, md: 0 }}
           justify={'flex-end'}
@@ -102,6 +119,36 @@ export default function Header() {
             Sign Up
           </Button>
         </Stack>
+        : 
+        <Stack
+          flex={{ base: 1, md: 0 }}
+          justify={'flex-end'}
+          direction={'row'}
+          spacing={6}>
+          <Button onClick={toggleColorMode}>
+            {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
+          </Button>
+          <Button
+            as={'a'}
+            fontSize={'sm'}
+            fontWeight={400}
+          >
+            My
+          </Button>
+          <Button
+            onClick={onLogout}
+            display={{ base: 'none', md: 'inline-flex' }}
+            fontSize={'sm'}
+            fontWeight={600}
+            color={'white'}
+            bg={'pink.400'}
+            _hover={{
+              bg: 'pink.300',
+            }}>
+            Log Out
+          </Button>
+        </Stack>}
+        
       </Flex>
 
       <Collapse in={isOpen} animateOpacity>
@@ -112,14 +159,14 @@ export default function Header() {
   );
 }
 
-const DesktopNav = () => {
+const DesktopNav = ({role}) => {
   const linkColor = useColorModeValue('gray.600', 'gray.200');
   const linkHoverColor = useColorModeValue('gray.800', 'white');
   const popoverContentBgColor = useColorModeValue('white', 'gray.800');
 
   return (
     <Stack direction={'row'} spacing={4}>
-      {NAV_ITEMS.map((navItem) => (
+      {NAV_ITEMS_ALL.map((navItem) => (
         <Box key={navItem.label}>
           <Popover trigger={'hover'} placement={'bottom-start'}>
             <PopoverTrigger>
@@ -155,6 +202,42 @@ const DesktopNav = () => {
           </Popover>
         </Box>
       ))}
+      {role ? NAV_ITEMS_CLIENT.map((navItem) => (
+        <Box key={navItem.label}>
+          <Popover trigger={'hover'} placement={'bottom-start'}>
+            <PopoverTrigger>
+              <Link
+                p={2}
+                href={navItem.href ?? '#'}
+                fontSize={'sm'}
+                fontWeight={500}
+                color={linkColor}
+                _hover={{
+                  textDecoration: 'none',
+                  color: linkHoverColor,
+                }}>
+                {navItem.label}
+              </Link>
+            </PopoverTrigger>
+
+            {navItem.children && (
+              <PopoverContent
+                border={0}
+                boxShadow={'xl'}
+                bg={popoverContentBgColor}
+                p={4}
+                rounded={'xl'}
+                minW={'sm'}>
+                <Stack>
+                  {navItem.children.map((child) => (
+                    <DesktopSubNav key={child.label} {...child} />
+                  ))}
+                </Stack>
+              </PopoverContent>
+            )}
+          </Popover>
+        </Box>
+      )): null}
     </Stack>
   );
 };
@@ -162,7 +245,7 @@ const DesktopNav = () => {
 const DesktopSubNav = ({ label, href, subLabel }) => {
   return (
     <Link
-      href={href}
+      href={`http://localhost:3000` + href}
       role={'group'}
       display={'block'}
       p={2}
@@ -199,7 +282,10 @@ const MobileNav = () => {
       bg={useColorModeValue('white', 'gray.800')}
       p={4}
       display={{ md: 'none' }}>
-      {NAV_ITEMS.map((navItem) => (
+      {NAV_ITEMS_ALL.map((navItem) => (
+        <MobileNavItem key={navItem.label} {...navItem} />
+      ))}
+      {NAV_ITEMS_CLIENT.map((navItem) => (
         <MobileNavItem key={navItem.label} {...navItem} />
       ))}
     </Stack>
@@ -256,8 +342,9 @@ const MobileNavItem = ({ label, children, href }) => {
   );
 };
 
-
-const NAV_ITEMS = [
+//----------------------------header content--------------------------
+//href: "/*"
+const NAV_ITEMS_ALL = [
   {
     label: '게시판',
     children: [
@@ -269,17 +356,20 @@ const NAV_ITEMS = [
       {
         label: '공지사항',
         subLabel: 'Up-and-coming Designers',
-        href: '#',
+        href: '/notice/main',
       },
     ],
-  },
+  }
+];
+
+const NAV_ITEMS_CLIENT = [
   {
     label: '내 식물',
     children: [
       {
         label: '스트리밍',
         subLabel: 'Find your dream design job',
-        href: 'myplant',
+        href: '/myplant',
       },
       {
         label: '내 일기장',
@@ -290,6 +380,6 @@ const NAV_ITEMS = [
   },
   {
     label: '마이페이지',
-    href: 'mypage/main',
+    href: `/mypage/1/main`,
   },
 ];

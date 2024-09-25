@@ -11,7 +11,7 @@ export default function MyPlant() {
       setDatas(json.sensorData);
       setIsLoading(false);
     }
-    
+    console.log(datas);
     useEffect(() => {
         fetchData();
     }, []);

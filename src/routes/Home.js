@@ -11,14 +11,18 @@ import {
   Button,
   HStack,
 } from '@chakra-ui/react';
+import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
-
+import { getAnnounceRecentList, getBoardRecentList } from '../api';
+import BoradSkeleton from '../components/BoardSkeleton';
 
 export default function Home() {
-  //---------------메인 페이지--------------------
+  //--------------------------메인 페이지--------------------------------
+  const {data: bData, isLoading: bLoading} = useQuery(["boardList"], getBoardRecentList);
+  const {data: aData, isLoading: aLoading} = useQuery(["noticeList"], getAnnounceRecentList);
+  
   return (
     <Box m={10}>
-      
       <TableContainer>
         <Table variant='simple'>
           <Thead>
@@ -30,24 +34,25 @@ export default function Home() {
             </Tr>
           </Thead>
           <Tbody>
+          {bLoading? (
+            <>
+              <BoradSkeleton />
+            </>
+          ) : null}
+          {bData?.map((data)=>(
             <Tr>
-              <Td>00001</Td>
-              <Td>게시글 제목1</Td>
-              <Td>ㅁㅁㅁ</Td>
-              <Td isNumeric>2024-06-13</Td>
+              <Td>{data.id}</Td>
+              <Td>
+                <Link to={`/board/show/${data.id}`}>{data.title}</Link>
+              </Td>
+              <Td>
+                <Link to={`/mypage/${data.user.id}/main`}>
+                  {data.user.name}
+                </Link>
+              </Td>
+              <Td isNumeric>{data.regdate}</Td>
             </Tr>
-            <Tr>
-              <Td>00001</Td>
-              <Td>게시글 제목1</Td>
-              <Td>ㅁㅁㅁ</Td>
-              <Td isNumeric>2024-06-13</Td>
-            </Tr>
-            <Tr>
-              <Td>00001</Td>
-              <Td>게시글 제목1</Td>
-              <Td>ㅁㅁㅁ</Td>
-              <Td isNumeric>2024-06-13</Td>
-            </Tr>
+            ))}
           </Tbody>
         </Table>
       </TableContainer>
@@ -64,30 +69,25 @@ export default function Home() {
           <Thead>
             <Tr>
               <Th>No.</Th>
-              <Th>게시글</Th>
-              <Th>작성자</Th>
-              <Th isNumeric>날짜</Th>
+              <Th>제목</Th>
+              <Th>내용</Th>
             </Tr>
           </Thead>
           <Tbody>
+            {aLoading? (
+              <>
+                <BoradSkeleton />
+              </>
+            ) : null}
+            {aData?.map((data)=>(
             <Tr>
-              <Td>00001</Td>
-              <Td>게시글 제목1</Td>
-              <Td>ㅁㅁㅁ</Td>
-              <Td isNumeric>2024-06-13</Td>
+              <Td>{data.id}</Td>
+              <Td>
+                <Link to={`/notice/show/${data.id}`}>{data.title}</Link>
+              </Td>
+              <Td>{data.content}</Td>
             </Tr>
-            <Tr>
-              <Td>00001</Td>
-              <Td>게시글 제목1</Td>
-              <Td>ㅁㅁㅁ</Td>
-              <Td isNumeric>2024-06-13</Td>
-            </Tr>
-            <Tr>
-              <Td>00001</Td>
-              <Td>게시글 제목1</Td>
-              <Td>ㅁㅁㅁ</Td>
-              <Td isNumeric>2024-06-13</Td>
-            </Tr>
+            ))}
           </Tbody>
         </Table>
       </TableContainer>

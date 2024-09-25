@@ -1,4 +1,4 @@
-import { Box, Button, Center, Grid, HStack, Progress, Stack, Text } from "@chakra-ui/react";
+import { Box, Button, Grid, HStack, Progress, Stack, Text } from "@chakra-ui/react";
 import { getActuator } from "../api";
 import { useState } from "react";
 
@@ -31,23 +31,23 @@ export default function MyplantController(sensorData) {
             <HStack mt={10}>
                 <Box w={50} textAlign={'center'} bg='tomato' borderRadius={'lg'}>온도</Box>
                 <Box>: {datas[1]}</Box>
-                <Progress value={datas[1]} />
             </HStack>
+            <Progress hasStripe value={datas[1]} />
             <HStack>
                 <Box w={50} textAlign={'center'} bg='tomato' borderRadius={'lg'}>습도</Box>
                 <Box>: {datas[2]}</Box>
-                <Progress value={datas[2]} />
             </HStack>
+            <Progress hasStripe value={datas[2]} />
             <HStack>
                 <Box w={50} textAlign={'center'} bg='tomato' borderRadius={'lg'}>조도</Box>
                 <Box>: {datas[3]}%</Box>
-                <Progress value={datas[3]} />
             </HStack>
+            <Progress hasStripe value={datas[3]} />
             <HStack>
                 <Box w={50} textAlign={'center'} bg='tomato' borderRadius={'lg'}>일조량</Box>
                 <Box>: {datas[4]}/100</Box>
-                <Progress value={datas[4]} />
             </HStack>
+            <Progress hasStripe value={datas[4]} />
         </Stack>
     );
 }

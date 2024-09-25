@@ -8,12 +8,22 @@ import BoardMain from "./routes/BoardMain";
 import MypageEdit from "./routes/MypageEdit";
 import MypageMain from "./routes/MypageMain";
 import BorderShow from "./routes/BorderShow";
+import Test from "./routes/Test";
+import Editor from "./routes/Editor";
+import BoardEdit from "./routes/BoardEdit";
+import NoticeMain from "./routes/NoticeMain";
+import NoticeShow from "./routes/NoticeShow";
+import NoticeEdit from "./routes/NoticeEdit";
+import NoticePost from "./routes/NoticePost";
+import NotFound from "./routes/NotFound"
+
 
 //---------------라우터 여기서 url에 따라 라우팅--------------------
 const router = createBrowserRouter([
     {
         path: "/",
         element: <Root />,
+        errorElement: <NotFound />,
         children: [
             {
                 path: "",
@@ -28,7 +38,7 @@ const router = createBrowserRouter([
                 element: <SignUp />
             },
             {
-                path: "mypage",
+                path: "mypage/:userId",
                 children: [
                     {
                         path: "edit",
@@ -52,6 +62,10 @@ const router = createBrowserRouter([
                         element: <BoardPost />
                     },
                     {
+                        path: "edit/:boardId",
+                        element: <BoardEdit />
+                    },
+                    {
                         path: "main",
                         element: <BoardMain />
                     },
@@ -61,6 +75,35 @@ const router = createBrowserRouter([
                     },
                 ]
             },
+            {
+                path: "notice",
+                children: [
+                    {
+                        path: "post",
+                        element: <NoticePost />
+                    },
+                    {
+                        path: "edit/:noticeId",
+                        element: <NoticeEdit />
+                    },
+                    {
+                        path: "main",
+                        element: <NoticeMain />
+                    },
+                    {
+                        path: "show/:noticeId",
+                        element: <NoticeShow />
+                    },
+                ]
+            },
+            {
+                path: "test",
+                element: <Test />
+            },
+            {
+                path: "editor",
+                element: <Editor />
+            }
         ]
     }
 ]);

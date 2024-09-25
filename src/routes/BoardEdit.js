@@ -11,24 +11,36 @@ import {
     Textarea,
   } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
-import { uploadBoard } from '../api';
+import { editBoard } from '../api';
+import { useEffect, useState } from 'react';
 
-export default function BoardPost() {
+export default function BoardEdit() {
+    const [isLoading, setIsLoading] = useState(true);
+    const [datas, setDatas] = useState([]);
+    const {boardId} = useParams();  
     const {register, handleSubmit} = useForm();
     const navigate = useNavigate();
-    const mutation = useMutation(uploadBoard, {
+    const mutation = useMutation(editBoard, {
         onSuccess: (data) => {
             navigate('/board/main', {replace: true});
             //window.location.replace("/board/main");
-            //오류가 너무 생김 너무 일찌 리로딩 해서 생기는 문제 같은데
         }
     })
     const onSubmit = (data) => {
         console.log(data);
-        mutation.mutate(data);
+        mutation.mutate({variables: data, id: boardId});
     };  
+    const fetchData = async () => {
+        const response = await fetch(`http://localhost:8081/api/freeboard/${boardId}`);
+        const json = await response.json();
+        setDatas(json);
+        setIsLoading(false);
+    }
+    useEffect(() => {
+        fetchData();
+    }, []);
     //---------------게시글 등록 페이지--------------------
     return (
       <Flex
@@ -52,6 +64,7 @@ export default function BoardPost() {
               <FormControl isRequired>
                 <FormLabel>제목</FormLabel>
                 <Input 
+                    defaultValue={datas.title}
                     {...register("title", {required: true})}
                     type="text"
                     required
@@ -68,6 +81,7 @@ export default function BoardPost() {
               <FormControl>
                 <FormLabel>글 내용</FormLabel>
                 <Textarea
+                    defaultValue={datas.content}
                     {...register("content", {required: true})}
                 />
               </FormControl>
@@ -81,7 +95,7 @@ export default function BoardPost() {
                   _hover={{
                     bg: 'blue.500',
                   }}>
-                  등록
+                  수정
                 </Button>
               </Stack>
             </Stack>

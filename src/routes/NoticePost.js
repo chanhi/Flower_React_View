@@ -13,14 +13,14 @@ import {
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
-import { uploadBoard } from '../api';
+import { uploadNotice } from '../api';
 
-export default function BoardPost() {
+export default function NoticePost() {
     const {register, handleSubmit} = useForm();
     const navigate = useNavigate();
-    const mutation = useMutation(uploadBoard, {
+    const mutation = useMutation(uploadNotice, {
         onSuccess: (data) => {
-            navigate('/board/main', {replace: true});
+            navigate('/notice/main', {replace: true});
             //window.location.replace("/board/main");
             //오류가 너무 생김 너무 일찌 리로딩 해서 생기는 문제 같은데
         }
@@ -55,14 +55,6 @@ export default function BoardPost() {
                     {...register("title", {required: true})}
                     type="text"
                     required
-                />
-              </FormControl>
-              <FormControl id="photo">
-                <FormLabel>사진 등록</FormLabel>
-                <Input 
-                    {...register("pictures")}
-                    type='file'
-                    multiple
                 />
               </FormControl>
               <FormControl>
