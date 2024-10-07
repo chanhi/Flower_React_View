@@ -16,6 +16,11 @@ import NoticeShow from "./routes/NoticeShow";
 import NoticeEdit from "./routes/NoticeEdit";
 import NoticePost from "./routes/NoticePost";
 import NotFound from "./routes/NotFound"
+import DiaryMain from "./routes/DiaryMain";
+import DiaryPost from "./routes/DiaryPost";
+import DiaryShow from "./routes/DiaryShow";
+import DiaryEdit from "./routes/DiaryEdit";
+import FriendSearch from "./routes/FriendSearch";
 
 
 //---------------라우터 여기서 url에 따라 라우팅--------------------
@@ -76,6 +81,27 @@ const router = createBrowserRouter([
                 ]
             },
             {
+                path: "diary",
+                children: [
+                    {
+                        path: "post",
+                        element: <DiaryPost />
+                    },
+                    {
+                        path: "edit/:diaryId",
+                        element: <DiaryEdit />
+                    },
+                    {
+                        path: "main",
+                        element: <DiaryMain />
+                    },
+                    {
+                        path: "show/:diaryId",
+                        element: <DiaryShow />
+                    },
+                ]
+            },
+            {
                 path: "notice",
                 children: [
                     {
@@ -95,6 +121,10 @@ const router = createBrowserRouter([
                         element: <NoticeShow />
                     },
                 ]
+            },
+            {
+                path: "friend",
+                element: <FriendSearch />
             },
             {
                 path: "test",

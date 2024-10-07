@@ -40,7 +40,7 @@ export default function Home() {
             </>
           ) : null}
           {bData?.map((data)=>(
-            <Tr>
+            <Tr key={data.id}>
               <Td>{data.id}</Td>
               <Td>
                 <Link to={`/board/show/${data.id}`}>{data.title}</Link>
@@ -80,7 +80,7 @@ export default function Home() {
               </>
             ) : null}
             {aData?.map((data)=>(
-            <Tr>
+            <Tr key={data.id}>
               <Td>{data.id}</Td>
               <Td>
                 <Link to={`/notice/show/${data.id}`}>{data.title}</Link>

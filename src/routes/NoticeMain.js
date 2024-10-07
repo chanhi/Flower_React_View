@@ -6,7 +6,7 @@ import BoradSkeleton from "../components/BoardSkeleton";
 
 export default function NoticeMain() {
     const {isLoading, data} = useQuery(["noticeList"], getAnnounceList);
-    console.log(data);
+
     //---------------게시글 리스트 페이지--------------------
     return(
         <Stack>
@@ -27,7 +27,7 @@ export default function NoticeMain() {
                         </>
                     ) : null}
                     {data?.map((data)=>(
-                        <Tr>
+                        <Tr key={data.id}>
                             <Td>{data.id}</Td>
                             <Td>
                                 <Link to={`/notice/show/${data.id}`}>{data.title}</Link>

@@ -1,4 +1,4 @@
-//import Cookie from "js-cookie";
+import Cookie from "js-cookie";
 import axios from "axios";
 //---------------react-query를 이용한 api 파일--------------------
 //---------------base URL------------------
@@ -7,7 +7,17 @@ const instance = axios.create({
     withCredentials: true,
 });
 //유저 정보 요청
-export const getMe = () => instance.get("session-login/info").then((response) => response.data);
+export const getMe = () => instance.get("session-login/info")
+.then((response) => {
+    const userData = response.data;
+    Cookie.set("userInfo", JSON.stringify(userData), {expires: 3});
+    return userData;
+}).catch((error) => {
+    console.error('Error fetching user data:', error);
+    throw error;
+});
+//친구 정보 요청
+export const getFriends = () => instance.get("friend/getallfriend").then((response) => response.data);
 //센서 데이터 요청
 export const getData = () => instance.get("udp/sensor").then((response) => response.data);
 
@@ -25,7 +35,6 @@ export const getBoardRecentList = () => instance.get("freeboard/recent").then((r
 //해당 id 게시글 요청
 export const getBoard = async (queryKey) => {
     const [_ ,boardId] = queryKey;
-    console.log(boardId);
     const response = await instance.get(`freeboard/${boardId}`);
     return response.data;
 }
@@ -51,6 +60,10 @@ export const editBoard = ({variables, id}) => {
 export const deleteBoard = (id) => {
     instance.delete(`freeboard/${id}/delete`).then((response) => response.data);
 }
+//게시글 좋아요 개수
+export const getLike = (id) => instance.get(`freeboard/${id}/getLike`).then((response)=>response.data);
+//게시글 좋아요
+export const postLike = (id) => instance.get(`freeboard/${id}/like`).then((response)=>response.data);
 //댓글 요청
 export const getComments = () => instance.get("comments").then((response)=>response.data);
 //댓글 생성
@@ -64,12 +77,16 @@ export const uploadComment = (variables) => {
 }
 //대댓글 생성
 export const uploadReComment = ({variables, id}) => {
-    instance.patch(`freeboardcomment/${id}/createW`, variables, {
+    instance.post(`freeboardcomment/${id}/create`, variables, {
         headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'multipart/form-data',
         },
     })
     .then((response) => response.data);
+}
+//댓글 삭제
+export const deleteComment = (id) => {
+    instance.put(`freeboardcomment/${id}/delete`).then((response) => response.data);
 }
 //--------------------------------------공지사항------------------------------------
 //공지사항 리스트 요청
@@ -123,6 +140,34 @@ export const getRecentWriteComment = (userId) => {
     instance.get(`mypage/${userId}/recentfreeboardcomment`).then((response) => response.data);
 }
 
+//----------------------------------일기장----------------------------------
+//일기장 리스트 요청
+export const getDiariesList = (id) => instance.get(`diaries/${id}`).then((response)=>response.data);
+//일기장 요청
+export const getDiary = (userId, diaryId) => instance.get(`diaries/${userId}/${diaryId}`).then((response)=>response.data);
+//일기장 업로드
+export const uploadDiary = (variables) => {
+    instance.post(`diaries/create`, variables, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    })
+    .then((response) => response.data);
+}
+//일기장 수정
+export const editDiary = ({variables, id, userId}) => {
+    instance.put(`diaries/${userId}/${id}/update`, variables, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    })
+    .then((response) => response.data);
+}
+//일기장 삭제
+export const deleteDiary = (boardId, userId) => {
+    instance.put(`diaries/${userId}/${boardId}/delete`).then((response) => response.data);
+}
+
 //----------------------------------회원 관련------------------------------------
 export const signUp = (variables) => {
     instance.post(`usermanage/create`, variables, {
@@ -139,6 +184,8 @@ export const usernameCheck = async (loginId) =>
 export const nicknameCheck = async (nickname) => 
     instance.get(`usermanage/check-nickname-duplicate?nickname=${encodeURIComponent(nickname)}`).then((response) => response.data);
 
+export const isFriend = (userId) => instance.get(`friend/isfriendwith/${userId}`).then((response) => response.data);
+
 export const logIn = (variables) => {
     instance.post(`session-login/login`, variables, {
         headers: {
@@ -154,5 +201,11 @@ export const logOut = () => {
             'Content-Type': 'application/json',
         },
     })
-    .then((response) => response.data);
+    .then((response) => {
+        Cookie.remove("userInfo");
+        return response.data;
+    }).catch((error) => {
+        console.error('Error during logout:', error);
+        throw error;
+    });
 }

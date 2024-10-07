@@ -27,6 +27,7 @@ import {
 import LoginModal from './LoginModal';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { getMe, logOut } from '../api';
+import Cookie from "js-cookie";
 
 export default function Header() {
   const { isOpen, onToggle } = useDisclosure();
@@ -47,6 +48,7 @@ export default function Header() {
   const onLogout = async () => {
     mutation.mutate();
   }
+  const userInfo = JSON.parse(Cookie.get("userInfo"));
   //console.log(!isLoading?data:null);
   //---------------헤더--------------------
   return (
@@ -132,6 +134,7 @@ export default function Header() {
             as={'a'}
             fontSize={'sm'}
             fontWeight={400}
+            href={`/mypage/${userInfo.id}/main`}
           >
             My
           </Button>
@@ -374,12 +377,12 @@ const NAV_ITEMS_CLIENT = [
       {
         label: '내 일기장',
         subLabel: 'An exclusive list for contract work',
-        href: '#',
+        href: '/diary/main',
       },
     ],
   },
   {
-    label: '마이페이지',
-    href: `/mypage/1/main`,
+    label: '친구',
+    href: `/friend`,
   },
 ];

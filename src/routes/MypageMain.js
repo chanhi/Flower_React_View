@@ -16,9 +16,10 @@ import {
 } from '@chakra-ui/react';
 import { Link, useParams } from 'react-router-dom';
 import HeatMap from 'react-heatmap-grid'
-import { getRecentWriteBoard } from '../api';
+import { isFriend } from '../api';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import Cookie from "js-cookie";
   
 export default function MypageMain() {
   const xLabels = new Array(52).fill(0).map((_, i) => `${i}`);
@@ -36,7 +37,11 @@ export default function MypageMain() {
   const [commentDatas, setCommentDatas] = useState([]);
   const [isULoading, setUIsLoading] = useState(true);
   const [userDatas, setUserDatas] = useState([]);
-  
+  const userInfo = JSON.parse(Cookie.get("userInfo"));
+
+  const { isLoading: isFLoading, data: isF } = useQuery(['isF', userId], () => isFriend(userId));
+  console.log(isF);
+
   const fetchBoard = async () => {
     const response = await fetch(`http://localhost:8081/api/mypage/${userId}/recentfreeboard`);
     const json = await response.json();
@@ -66,6 +71,11 @@ export default function MypageMain() {
   console.log(datas);
   console.log(commentDatas);
   console.log(userDatas);
+
+  const fetchFriendAdd = async () => {
+    const response = await fetch(`http://localhost:8081/api/friend/add/${userId}`);
+  }
+
   //---------------마이페이지 메인--------------------
   return (
       <Box m={20}>
@@ -82,7 +92,7 @@ export default function MypageMain() {
             </Thead>
             <Tbody>
               {datas?.map((data)=>(
-              <Tr>
+              <Tr key={data.id}>
                 <Td>{data.id}</Td>
                 <Td>
                   <Link to={`/board/show/${data.id}`}>{data.title}</Link>
@@ -113,7 +123,7 @@ export default function MypageMain() {
             </Thead>
             <Tbody>
               {commentDatas?.map((data)=>(
-              <Tr>
+              <Tr key={data.id}>
                 <Td>{data.id}</Td>
                 <Td>
                   <Link to={`/board/show/${data.cmPostId}`}>{data.content}</Link>
@@ -133,6 +143,7 @@ export default function MypageMain() {
                 <Button>내 정보 수정</Button>
             </Link>
             <Button>내 친구</Button>
+            {!isF ? <Button onClick={fetchFriendAdd}>친구 추가</Button> :null}
         </HStack>
         <Box mt={5}>
             <HeatMap xLabels={xLabels} yLabels={yLabels} data={data} />

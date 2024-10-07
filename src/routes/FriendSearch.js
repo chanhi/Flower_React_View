@@ -1,22 +1,23 @@
-import { Button, Stack, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import { Button, Input, Stack, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { getBoardList } from "../api";
+import { getFriends } from "../api";
 import BoradSkeleton from "../components/BoardSkeleton";
 
-export default function BoardMain() {
-    const {isLoading, data} = useQuery(["boardList"], getBoardList);
+export default function FriendSearch() {
+    const {isLoading, data} = useQuery(["friend"], getFriends);
+    console.log(data);
+    //친구 데이터 정리 필요
     //---------------게시글 리스트 페이지--------------------
     return(
         <Stack>
+            <Input />
             <TableContainer>
                 <Table variant='simple'>
                 <Thead>
                     <Tr>
                     <Th>No.</Th>
-                    <Th>제목</Th>
-                    <Th>작성자</Th>
-                    <Th isNumeric>날짜</Th>
+                    <Th>친구</Th>
                     </Tr>
                 </Thead>
                 <Tbody>
@@ -29,19 +30,16 @@ export default function BoardMain() {
                         <Tr key={data.id}>
                             <Td>{data.id}</Td>
                             <Td>
-                                <Link to={`/board/show/${data.id}`}>{data.title}</Link>
-                                {/*아이디 기준으로 해당 게시글로 이동하도록 prop 설정해야 됨*/}
+                                <Link to={`/mypage/${data.id}/main`}>{data.nickname}</Link>
                             </Td>
-                            <Td>{data.user.name}</Td>
-                            <Td isNumeric>{data.regdate}</Td>
                         </Tr>
                     ))}
                 </Tbody>
                 </Table>
             </TableContainer>
             
-            <Link to="/board/post">
-                <Button>게시글 등록</Button> 
+            <Link to="/diary/post">
+                <Button>일기장 등록</Button> 
             </Link>
         </Stack>
     )

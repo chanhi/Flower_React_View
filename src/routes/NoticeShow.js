@@ -61,6 +61,9 @@ export default function NoticeShow() {
                             <Button>수정</Button>
                         </Link>
                         <Button onClick={onDeleteButtonClick}>삭제</Button>
+                        <Link to={`/notice/main`}>
+                            <Button>목록</Button>
+                        </Link>
                     </HStack>
                 </Stack>
             </Flex>
