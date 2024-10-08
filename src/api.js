@@ -18,8 +18,15 @@ export const getMe = () => instance.get("session-login/info")
 });
 //친구 정보 요청
 export const getFriends = () => instance.get("friend/getallfriend").then((response) => response.data);
+//친구 추가
+export const addFriend = (id) => instance.get(`friend/add/${id}`).then((response) => response.data);
+//친구 삭제
+export const delFriend = (id) => instance.get(`friend/remove/${id}`).then((response) => response.data);
+//----------------------------------UDP-------------------------------
+//udp ip 요청
+export const getIPAddress = () => instance.get("udp/getipaddress").then((response) => response.data);
 //센서 데이터 요청
-export const getData = () => instance.get("udp/sensor").then((response) => response.data);
+export const getSensorData = (ip) => instance.get(`udp/sensor/${ip}`).then((response) => response.data);
 
 export const getActuator = (type) => {
     instance.get(`udp/${type}`).then((response)=>response.data);
@@ -124,21 +131,13 @@ export const deleteNotice = (id) => {
 
 //------------------------------------방명록------------------------------------
 //해당 유저 정보
-export const getHim = (userId) => {
-    instance.get(`mypage/${userId}/userinfo`).then((response) => response.data);
-}
+export const getHim = (userId) => instance.get(`mypage/${userId}/userinfo`).then((response) => response.data);
 //최근 쓴 게시글
-export const getRecentWriteBoard = async (queryKey) => {
-    console.log(queryKey);
-    const [_ ,userId] = queryKey;
-    console.log(userId);
-    const response = await instance.get(`mypage/${userId}/recentfreeboard`);
-    return response.data;
-}
+export const getRecentWriteBoard = (userId) => instance.get(`mypage/${userId}/recentfreeboard`).then((response) => response.data);
 //최근 쓴 댓글
-export const getRecentWriteComment = (userId) => {
-    instance.get(`mypage/${userId}/recentfreeboardcomment`).then((response) => response.data);
-}
+export const getRecentWriteComment = (userId) => instance.get(`mypage/${userId}/recentfreeboardcomment`).then((response) => response.data);
+//잔디
+export const getGrass = (userId) => instance.get(`mypage/${userId}/grassdata`).then((response) => response.data);
 
 //----------------------------------일기장----------------------------------
 //일기장 리스트 요청
@@ -208,4 +207,16 @@ export const logOut = () => {
         console.error('Error during logout:', error);
         throw error;
     });
+}
+
+//수정전 개인정보 요청
+export const getEditMyData = () => instance.get(`mypage/editinfo/getuserform`).then((response)=>response.data);
+//개인정보 수정
+export const editMyData = (variables) => {
+    instance.post(`mypage/editinfo/update`, variables, {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    .then((response) => response.data);
 }

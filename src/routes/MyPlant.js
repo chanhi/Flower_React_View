@@ -1,20 +1,18 @@
 import { Box, Flex, Skeleton, Stack} from "@chakra-ui/react";
-import { useEffect, useState } from "react";
 import MyplantController from "../components/MyplantController";
+import { getIPAddress, getSensorData } from "../api";
+import { useQuery } from "@tanstack/react-query";
 
 export default function MyPlant() {
-    const [isLoading, setIsLoading] = useState(true);
-    const [datas, setDatas] = useState([]);
-    const fetchData = async () => {
-      const response = await fetch("http://localhost:8081/api/udp/sensor");
-      const json = await response.json();
-      setDatas(json.sensorData);
-      setIsLoading(false);
-    }
-    console.log(datas);
-    useEffect(() => {
-        fetchData();
-    }, []);
+    const { isLoading: isIPLoading, data: ip } = useQuery(['ip'], getIPAddress);
+    console.log(ip);
+    const { isLoading: isSLoading, data: sensorData } = useQuery(
+      ['sensorData', ip],
+      () => getSensorData(ip.ip),
+      {
+        enabled: !!ip, // ip가 존재할 때만 요청 실행
+      }
+    );
     //---------------내 식물 페이지--------------------
       return (
         <>
@@ -25,11 +23,11 @@ export default function MyPlant() {
               </Box>
             </Stack>
             <Box width={200} height={200}>
-              {isLoading ? (
+              {isSLoading ? (
                 <>
                   <Skeleton height='20px' />
                 </>
-              ) : <MyplantController datas={datas} />}
+              ) : <MyplantController datas={sensorData} />}
             
             </Box>
           </Flex>

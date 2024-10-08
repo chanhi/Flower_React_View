@@ -54,7 +54,7 @@ export default function BorderShow() {
         fetchComment();
         fetchLike();
     }, []);
-    
+    console.log(commentDatas);
     const likeMutaion = useMutation(postLike, {
         onSuccess: () => {
             window.location.reload();  // 성공 시 페이지 새로고침
@@ -173,6 +173,7 @@ function RecursiveComment({ comment, boardId }) {
         <Stack mb={4}>
             <Divider borderColor={"black"} />
             <Box>{comment.user.loginId}</Box>
+            {!comment.disable ? 
             <HStack justifyContent={"space-between"}>
                 <Box>{comment.content}</Box>
                 <HStack>
@@ -181,9 +182,14 @@ function RecursiveComment({ comment, boardId }) {
                     <Button size="sm" color={"red"} onClick={() => handleDeleteComment(comment.id)}>삭제</Button>
                 </HStack>
             </HStack>
+            :
+            <HStack justifyContent={"space-between"}>
+                <Box>{comment.content}</Box>
+                <Box></Box>
+            </HStack>}
 
             {/* 대댓글 입력 폼 */}
-            <ReCommentForm commentId={comment.id} boardId={boardId} />
+            <ReCommentForm comment={comment} boardId={boardId} />
 
             {/* 대댓글들 표시 */}
             {comment.recomments && comment.recomments.length > 0 && comment.recomments.map((recomment) => (
@@ -197,7 +203,7 @@ function RecursiveComment({ comment, boardId }) {
 }
 
 // 대댓글 작성 폼 컴포넌트
-function ReCommentForm({ commentId, boardId }) {
+function ReCommentForm({ comment, boardId }) {
     const { isOpen, onToggle } = useDisclosure();  // Chakra UI의 useDisclosure로 토글 기능 구현
     const { register, handleSubmit, reset } = useForm({defaultValues: {"cmPostId": boardId}});
 
@@ -208,15 +214,15 @@ function ReCommentForm({ commentId, boardId }) {
     })
     const handleReCommentSubmit = (data) => {
         // 대댓글 전송 로직
-        console.log("대댓글 작성:", data, "부모 댓글 ID:", commentId);
-        const payload = {variables: data, id: commentId};
+        console.log("대댓글 작성:", data, "부모 댓글 ID:", comment.id);
+        const payload = {variables: data, id: comment.id};
         reMutation.mutate(payload);
         reset();
     };
 
     return (
         <Stack>
-            <Button onClick={onToggle} w={20} size="sm">답글 달기</Button>
+            {comment.disable ? null :<Button onClick={onToggle} w={20} size="sm">답글 달기</Button>}
             {isOpen && (
                 <HStack as="form" onSubmit={handleSubmit(handleReCommentSubmit)}>
                     <Input {...register("content", { required: true })} size={'sm'} type="text" required />

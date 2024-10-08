@@ -2,11 +2,9 @@ import {
     Table,
     Thead,
     Tbody,
-    Tfoot,
     Tr,
     Th,
     Td,
-    TableCaption,
     TableContainer,
     Divider,
     Box,
@@ -16,8 +14,8 @@ import {
 } from '@chakra-ui/react';
 import { Link, useParams } from 'react-router-dom';
 import HeatMap from 'react-heatmap-grid'
-import { isFriend } from '../api';
-import { useQuery } from '@tanstack/react-query';
+import { addFriend, delFriend, getGrass, getHim, getRecentWriteBoard, getRecentWriteComment, isFriend } from '../api';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import Cookie from "js-cookie";
   
@@ -30,51 +28,43 @@ export default function MypageMain() {
   .map(() =>
     new Array(xLabels.length).fill(0).map(() => Math.floor(Math.random() * 100))
   );
+
   const {userId} = useParams();
-  const [isLoading, setIsLoading] = useState(true);
-  const [datas, setDatas] = useState([]);
-  const [isCLoading, setCIsLoading] = useState(true);
-  const [commentDatas, setCommentDatas] = useState([]);
-  const [isULoading, setUIsLoading] = useState(true);
-  const [userDatas, setUserDatas] = useState([]);
-  const userInfo = JSON.parse(Cookie.get("userInfo"));
+  const userCookie = Cookie.get("userInfo");
+  const userInfo = userCookie ? JSON.parse(userCookie) : null;
 
   const { isLoading: isFLoading, data: isF } = useQuery(['isF', userId], () => isFriend(userId));
-  console.log(isF);
+  const { isLoading: isBLoading, data: boardDatas } = useQuery(['boardDatas', userId], () => getRecentWriteBoard(userId));
+  const { isLoading: isCLoading, data: commentDatas } = useQuery(['commentDatas', userId], () => getRecentWriteComment(userId));
+  const { isLoading: isULoading, data: userDatas } = useQuery(['userDatas', userId], () => getHim(userId));
+  const { isLoading: isGLoading, data: grassData } = useQuery(['grassData', userId], () => getGrass(userId));
+  console.log(grassData);
 
-  const fetchBoard = async () => {
-    const response = await fetch(`http://localhost:8081/api/mypage/${userId}/recentfreeboard`);
-    const json = await response.json();
-    setDatas(json);
-    setIsLoading(false);
-  }
+  const addMutation = useMutation(addFriend, {
+      onSuccess: () => {
+          window.location.reload();  // 성공 시 페이지 새로고침
+      },
+      onError: (error) => {
+          console.error('Error deleting comment:', error);
+      },
+  });
 
-  const fetchComment = async () => {
-    const response = await fetch(`http://localhost:8081/api/mypage/${userId}/recentfreeboardcomment`);
-    const json = await response.json();
-    setCommentDatas(json);
-    setCIsLoading(false);
-  }
+  const handleFriendAdd = () => {
+    addMutation.mutate(userId);
+  };
 
-  const fetchUser = async () => {
-    const response = await fetch(`http://localhost:8081/api/mypage/${userId}/userinfo`);
-    const json = await response.json();
-    setUserDatas(json);
-    setUIsLoading(false);
-  }
+  const delMutation = useMutation(delFriend, {
+      onSuccess: () => {
+          window.location.reload();  // 성공 시 페이지 새로고침
+      },
+      onError: (error) => {
+          console.error('Error deleting comment:', error);
+      },
+  });
 
-  useEffect(() => {
-    fetchBoard();
-    fetchComment();
-    fetchUser();
-  }, []);
-  console.log(datas);
-  console.log(commentDatas);
-  console.log(userDatas);
-
-  const fetchFriendAdd = async () => {
-    const response = await fetch(`http://localhost:8081/api/friend/add/${userId}`);
-  }
+  const handleFriendDel = () => {
+    delMutation.mutate(userId);
+  };
 
   //---------------마이페이지 메인--------------------
   return (
@@ -91,7 +81,7 @@ export default function MypageMain() {
               </Tr>
             </Thead>
             <Tbody>
-              {datas?.map((data)=>(
+              {boardDatas?.map((data)=>(
               <Tr key={data.id}>
                 <Td>{data.id}</Td>
                 <Td>
@@ -139,11 +129,14 @@ export default function MypageMain() {
           </Table>
         </TableContainer>
         <HStack justifyContent="end">
-            <Link to={`/mypage/${userDatas.id}/edit`}>
-                <Button>내 정보 수정</Button>
+          {userId == userInfo.id ? 
+            <Link to={`/mypage/${userId}/edit`}>
+              <Button>내 정보 수정</Button>
             </Link>
-            <Button>내 친구</Button>
-            {!isF ? <Button onClick={fetchFriendAdd}>친구 추가</Button> :null}
+          : null}
+            {userId == userInfo.id ? null : 
+              isF ? <Button onClick={handleFriendDel}>친구 삭제</Button> : <Button onClick={handleFriendAdd}>친구 추가</Button>
+            }
         </HStack>
         <Box mt={5}>
             <HeatMap xLabels={xLabels} yLabels={yLabels} data={data} />

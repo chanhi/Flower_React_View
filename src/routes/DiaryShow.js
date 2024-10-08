@@ -9,7 +9,8 @@ import Cookie from "js-cookie";
 export default function DiaryShow() {
     const {diaryId} = useParams(); 
     const navigate = useNavigate(); 
-    const userInfo = JSON.parse(Cookie.get("userInfo"));
+    const userCookie = Cookie.get("userInfo");
+    const userInfo = userCookie ? JSON.parse(userCookie) : null;
     const userId = userInfo.id;
     const { isLoading, data, error } = useQuery(
         ['diaryData', userId, diaryId],  // 쿼리 키

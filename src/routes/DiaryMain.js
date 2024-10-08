@@ -6,7 +6,8 @@ import BoradSkeleton from "../components/BoardSkeleton";
 import Cookie from "js-cookie";
 
 export default function DiaryMain() {
-    const userInfo = JSON.parse(Cookie.get("userInfo"));
+    const userCookie = Cookie.get("userInfo");
+    const userInfo = userCookie ? JSON.parse(userCookie) : null;
     const { isLoading, data } = useQuery(['diaryData', userInfo.id], () => getDiariesList(userInfo.id));
     
     //---------------게시글 리스트 페이지--------------------

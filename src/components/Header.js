@@ -48,7 +48,8 @@ export default function Header() {
   const onLogout = async () => {
     mutation.mutate();
   }
-  const userInfo = JSON.parse(Cookie.get("userInfo"));
+  const userCookie = Cookie.get("userInfo");
+  const userInfo = userCookie ? JSON.parse(userCookie) : null;
   //console.log(!isLoading?data:null);
   //---------------헤더--------------------
   return (

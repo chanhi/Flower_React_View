@@ -13,11 +13,11 @@ import {
     Text,
     useColorModeValue,
     Link,
-  } from '@chakra-ui/react';
-  import { useState } from 'react';
-  import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
-import { useMutation } from '@tanstack/react-query';
-import { nicknameCheck, signUp, usernameCheck } from '../api';
+} from '@chakra-ui/react';
+import { useState } from 'react';
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { editMyData, getEditMyData, nicknameCheck, signUp, usernameCheck } from '../api';
 import { useForm } from 'react-hook-form';
 
 export default function MypageEdit() {
@@ -27,10 +27,11 @@ export default function MypageEdit() {
   const [checkUserName, setCheckUserName] = useState(false);
   const [checkNickName, setCheckNickName] = useState(false);
   const {register, handleSubmit} = useForm();
-  //const navigate = useNavigate();
-  const mutation = useMutation(signUp ,{
+  
+  const { isLoading: isMLoading, data: myData } = useQuery(['myData'], getEditMyData);
+  console.log(myData);
+  const mutation = useMutation(editMyData ,{
     onSuccess: (data) => {
-      //navigate('/', {replace: true});
       window.location.replace("/");
     }
   })
@@ -50,7 +51,6 @@ export default function MypageEdit() {
     const nickname = document.getElementById("nickNameInput").value;
     const result = nicknameCheck(nickname);
     const json = await result;
-    console.log(json);
     setCheckNickName(json.isDuplicate);
     {checkNickName ? setNicknameResult("you can use it") : setNicknameResult("you can't use it")}
   }
@@ -86,6 +86,7 @@ export default function MypageEdit() {
                     <FormLabel>Username</FormLabel>
                     <Input 
                       {...register("loginId", {required: true})}
+                      defaultValue={myData.loginId}
                       type="text"
                       required
                       id='userNameInput'
@@ -134,6 +135,7 @@ export default function MypageEdit() {
                   <FormLabel>Nickname</FormLabel>
                   <Input 
                     {...register("nickname", {required: true})}
+                    defaultValue={myData.nickname}
                     type="text"
                     required
                     id='nickNameInput'
@@ -146,6 +148,7 @@ export default function MypageEdit() {
                 <FormLabel>Email address</FormLabel>
                 <Input 
                   {...register("email", {required: false})}
+                  defaultValue={myData.email}
                   type="email"
                 />
               </FormControl>
@@ -153,6 +156,7 @@ export default function MypageEdit() {
                 <FormLabel>Name</FormLabel>
                 <Input 
                   {...register("name", {required: true})}
+                  defaultValue={myData.name}
                   type="text"
                   required
                 />
@@ -161,6 +165,7 @@ export default function MypageEdit() {
                 <FormLabel>Phone Number</FormLabel>
                 <Input 
                   {...register("phonenumber", {required: false})}
+                  defaultValue={myData.phonenumber}
                   type="text"
                 />
               </FormControl>

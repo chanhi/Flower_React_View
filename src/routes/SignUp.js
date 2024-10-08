@@ -14,7 +14,7 @@ import {
     useColorModeValue,
     Link,
   } from '@chakra-ui/react';
-  import { useCallback, useEffect, useState } from 'react';
+  import { useState } from 'react';
   import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { useForm } from 'react-hook-form';
 //import { useNavigate } from 'react-router-dom';
@@ -44,7 +44,6 @@ import { signUp, usernameCheck, nicknameCheck } from '../api';
       const username = document.getElementById("userNameInput").value;
       const result = usernameCheck(username);
       const json = await result;
-      console.log(json);
       setCheckUserName(json.isDuplicate);
       {checkUserName ? setUsernameResult("you can use it") : setUsernameResult("you can't use it")}
     }
@@ -53,7 +52,6 @@ import { signUp, usernameCheck, nicknameCheck } from '../api';
       const nickname = document.getElementById("nickNameInput").value;
       const result = nicknameCheck(nickname);
       const json = await result;
-      console.log(json);
       setCheckNickName(json.isDuplicate);
       {checkNickName ? setNicknameResult("you can use it") : setNicknameResult("you can't use it")}
     }
