@@ -5,7 +5,6 @@ import { useQuery } from "@tanstack/react-query";
 
 export default function MyPlant() {
     const { isLoading: isIPLoading, data: ip } = useQuery(['ip'], getIPAddress);
-    console.log(ip);
     const { isLoading: isSLoading, data: sensorData } = useQuery(
       ['sensorData', ip],
       () => getSensorData(ip.ip),
@@ -27,7 +26,7 @@ export default function MyPlant() {
                 <>
                   <Skeleton height='20px' />
                 </>
-              ) : <MyplantController datas={sensorData} />}
+              ) : <MyplantController datas={sensorData} ip={ip} />}
             
             </Box>
           </Flex>

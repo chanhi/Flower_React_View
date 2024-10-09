@@ -16,11 +16,7 @@ export default function DiaryShow() {
         ['diaryData', userId, diaryId],  // 쿼리 키
         () => getDiary(userId, diaryId)  // 쿼리 함수
     );
-
-    const onLikeButtonClick = () => {
-        //좋아요
-    }
-
+    
     const onDeleteButtonClick = () => {
         deleteDiary(diaryId, userId);
         //const response = await fetch(`http://localhost:8081/api/freeboard/${boardId}/delete`, {method: 'DELETE'});

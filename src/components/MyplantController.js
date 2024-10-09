@@ -1,27 +1,42 @@
 import { Box, Button, Grid, HStack, Progress, Stack, Text } from "@chakra-ui/react";
 import { getActuator } from "../api";
 import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
 
 export default function MyplantController(sensorData) {
-    const datas = sensorData.datas;
+    const datas = sensorData.datas.sensorData;
+    const ip = sensorData.ip.ip;
     const [isOn, setisOn] = useState(false);
     const toggleHandler = () => {
         // isOn의 상태를 변경하는 메소드를 구현
         setisOn(!isOn)
       };
     const onClickButton = (type) => {
-        getActuator(type);
+        getActuator(type, ip);
     }
+    const udpMutation = useMutation(getActuator, {
+        onSuccess: (data) => {
+            console.log(data);
+        },
+        onError: (error) => {
+            console.error('Error deleting comment:', error);
+        },
+    });
+  
+    const handleActuator = (type) => {
+        //type별로 플래그 세워서 response 받은걸로 상태 변환 -> 버튼 온오프상태
+        udpMutation.mutate({type: type, ip: ip});
+    };
     return(
         <Stack>
             <Grid gap={2} templateColumns={"2fr 2fr"} mt={10}>
-                <Button onClick={() => onClickButton('rotater')}>회전</Button>
+                <Button onClick={() => handleActuator('rotater')}>회전</Button>
                 <Button as={'a'} href="http://175.123.202.85:20800/screenshot">캡쳐</Button>
-                <Button onClick={() => onClickButton('led')}>조명</Button>
+                <Button onClick={() => handleActuator('led')}>조명</Button>
                 <Button 
                 colorScheme={isOn ? "blue" : "green"}
                 onClick={() => {
-                    onClickButton('sprinkler');
+                    handleActuator('sprinkler');
                     toggleHandler();
                 }}
                 >

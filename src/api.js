@@ -28,9 +28,8 @@ export const getIPAddress = () => instance.get("udp/getipaddress").then((respons
 //센서 데이터 요청
 export const getSensorData = (ip) => instance.get(`udp/sensor/${ip}`).then((response) => response.data);
 
-export const getActuator = (type) => {
-    instance.get(`udp/${type}`).then((response)=>response.data);
-} 
+export const getActuator = ({type, ip}) => instance.get(`udp/${type}/${ip}`).then((response)=>response.data);
+
 //스크린샷
 export const getScreenShot = () => instance.get("udp/screenshot").then((response)=>response.data);
 
