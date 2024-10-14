@@ -11,9 +11,6 @@ export default function MyplantController(sensorData) {
         // isOn의 상태를 변경하는 메소드를 구현
         setisOn(!isOn)
       };
-    const onClickButton = (type) => {
-        getActuator(type, ip);
-    }
     const udpMutation = useMutation(getActuator, {
         onSuccess: (data) => {
             console.log(data);
@@ -43,26 +40,30 @@ export default function MyplantController(sensorData) {
                     물주기
                     </Button>
             </Grid>
-            <HStack mt={10}>
-                <Box w={50} textAlign={'center'} bg='tomato' borderRadius={'lg'}>온도</Box>
-                <Box>: {datas[1]}</Box>
-            </HStack>
-            <Progress hasStripe value={datas[1]} />
-            <HStack>
-                <Box w={50} textAlign={'center'} bg='tomato' borderRadius={'lg'}>습도</Box>
-                <Box>: {datas[2]}</Box>
-            </HStack>
-            <Progress hasStripe value={datas[2]} />
-            <HStack>
-                <Box w={50} textAlign={'center'} bg='tomato' borderRadius={'lg'}>조도</Box>
-                <Box>: {datas[3]}%</Box>
-            </HStack>
-            <Progress hasStripe value={datas[3]} />
-            <HStack>
-                <Box w={50} textAlign={'center'} bg='tomato' borderRadius={'lg'}>일조량</Box>
-                <Box>: {datas[4]}/100</Box>
-            </HStack>
-            <Progress hasStripe value={datas[4]} />
+            {datas ? 
+            <Box>
+                <HStack mt={10}>
+                    <Box w={50} textAlign={'center'} bg='tomato' borderRadius={'lg'}>온도</Box>
+                    <Box>: {datas[1]}</Box>
+                </HStack>
+                <Progress hasStripe value={datas[1]} />
+                <HStack>
+                    <Box w={50} textAlign={'center'} bg='tomato' borderRadius={'lg'}>습도</Box>
+                    <Box>: {datas[2]}</Box>
+                </HStack>
+                <Progress hasStripe value={datas[2]} />
+                <HStack>
+                    <Box w={50} textAlign={'center'} bg='tomato' borderRadius={'lg'}>조도</Box>
+                    <Box>: {datas[3]}%</Box>
+                </HStack>
+                <Progress hasStripe value={datas[3]} />
+                <HStack>
+                    <Box w={50} textAlign={'center'} bg='tomato' borderRadius={'lg'}>일조량</Box>
+                    <Box>: {datas[4]}/100</Box>
+                </HStack>
+                <Progress hasStripe value={datas[4]} />
+            </Box>
+            : null}
         </Stack>
     );
 }

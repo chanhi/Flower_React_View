@@ -14,7 +14,7 @@ import {
     useColorModeValue,
     Link,
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { editMyData, getEditMyData, nicknameCheck, signUp, usernameCheck } from '../api';
@@ -26,6 +26,7 @@ export default function MypageEdit() {
   const [nicknameResult, setNicknameResult] = useState();
   const [checkUserName, setCheckUserName] = useState(false);
   const [checkNickName, setCheckNickName] = useState(false);
+  const [isFormValid, setIsFormValid] = useState(false);
   const {register, handleSubmit} = useForm();
   
   const { isLoading: isMLoading, data: myData } = useQuery(['myData'], getEditMyData);
@@ -38,13 +39,17 @@ export default function MypageEdit() {
   const onSubmit = (data) => {
     mutation.mutate(data);
   };  
+
+  useEffect(() => {
+    setIsFormValid(!checkUserName && !checkNickName);
+  }, [checkUserName, checkNickName]);
   
   const onUsernameCheckBtnClick = async () => {
     const username = document.getElementById("userNameInput").value;
     const result = usernameCheck(username);
     const json = await result;
     setCheckUserName(json.isDuplicate);
-    {checkUserName ? setUsernameResult("you can use it") : setUsernameResult("you can't use it")}
+    {!checkUserName ? setUsernameResult("you can use it") : setUsernameResult("you can't use it")}
   }
 
   const onNicknameCheckBtnClick = async () => {
@@ -52,8 +57,18 @@ export default function MypageEdit() {
     const result = nicknameCheck(nickname);
     const json = await result;
     setCheckNickName(json.isDuplicate);
-    {checkNickName ? setNicknameResult("you can use it") : setNicknameResult("you can't use it")}
+    {!checkNickName ? setNicknameResult("you can use it") : setNicknameResult("you can't use it")}
   }
+
+  const handleUsernameChange = () => {
+    setCheckUserName(false);
+    setUsernameResult('');
+  };
+
+  const handleNicknameChange = () => {
+    setCheckNickName(false);
+    setNicknameResult('');
+  };
 
     //---------------내 정보 수정 페이지--------------------
     return (
@@ -76,6 +91,7 @@ export default function MypageEdit() {
             bg={useColorModeValue('white', 'gray.700')}
             boxShadow={'lg'}
             p={8}>
+            {!isMLoading ? 
             <Stack 
               spacing={4}
               as='form'
@@ -90,6 +106,7 @@ export default function MypageEdit() {
                       type="text"
                       required
                       id='userNameInput'
+                      onChange={handleUsernameChange}
                     />
                   </FormControl>
                   <Button onClick={onUsernameCheckBtnClick}>중복확인</Button>
@@ -139,6 +156,7 @@ export default function MypageEdit() {
                     type="text"
                     required
                     id='nickNameInput'
+                    onChange={handleNicknameChange}
                   />
                 </FormControl>
                 <Button onClick={onNicknameCheckBtnClick}>중복확인</Button>
@@ -178,7 +196,8 @@ export default function MypageEdit() {
                   color={'white'}
                   _hover={{
                     bg: 'blue.500',
-                  }}>
+                  }}
+                  isDisabled={!isFormValid}>
                   Sign up
                 </Button>
               </Stack>
@@ -188,6 +207,7 @@ export default function MypageEdit() {
                 </Text>
               </Stack>
             </Stack>
+            : null }
           </Box>
         </Stack>
       </Flex>

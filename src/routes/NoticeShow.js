@@ -3,12 +3,15 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { deleteNotice } from "../api";
+import Cookie from "js-cookie";
 
 export default function NoticeShow() {
     const [isLoading, setIsLoading] = useState(true);
     const [datas, setDatas] = useState([]);
     const {noticeId} = useParams(); 
     const navigate = useNavigate(); 
+    const userCookie = Cookie.get("userInfo");
+    const userInfo = userCookie ? JSON.parse(userCookie) : null;
     //useQuery 왜 안되냐
     //const [isLoading, datas] = useQuery([`board`,boardId] ,getBoard);
     
@@ -27,7 +30,7 @@ export default function NoticeShow() {
         deleteNotice(noticeId);
         navigate('/notice/main');
     }
-    
+    console.log(userInfo);
     //---------------게시글 상세 페이지--------------------
     return(
         <>
@@ -57,10 +60,13 @@ export default function NoticeShow() {
                             {datas.content}
                     </Box>
                     <HStack justify="flex-end">
-                        <Link to={`/notice/edit/${noticeId}`}>
-                            <Button>수정</Button>
-                        </Link>
-                        <Button onClick={onDeleteButtonClick}>삭제</Button>
+                        {userInfo.role == "ADMIN" ?
+                        <HStack>
+                            <Link to={`/notice/edit/${noticeId}`}>
+                                <Button>수정</Button>
+                            </Link>
+                            <Button onClick={onDeleteButtonClick}>삭제</Button>
+                        </HStack> : null}
                         <Link to={`/notice/main`}>
                             <Button>목록</Button>
                         </Link>

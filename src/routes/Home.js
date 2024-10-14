@@ -56,11 +56,6 @@ export default function Home() {
           </Tbody>
         </Table>
       </TableContainer>
-      <HStack justifyContent="end">
-        <Link to="/board/post">
-          <Button>게시글 등록</Button> 
-        </Link>
-      </HStack>
 
       <Divider height={20} />
 

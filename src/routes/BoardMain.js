@@ -32,7 +32,9 @@ export default function BoardMain() {
                                 <Link to={`/board/show/${data.id}`}>{data.title}</Link>
                                 {/*아이디 기준으로 해당 게시글로 이동하도록 prop 설정해야 됨*/}
                             </Td>
-                            <Td>{data.user.name}</Td>
+                            <Td>
+                                <Link to={`/mypage/${data.user.id}/main`}>{data.user.nickname}</Link>
+                            </Td>
                             <Td isNumeric>{data.regdate}</Td>
                         </Tr>
                     ))}

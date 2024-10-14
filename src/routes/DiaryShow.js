@@ -16,6 +16,7 @@ export default function DiaryShow() {
         ['diaryData', userId, diaryId],  // 쿼리 키
         () => getDiary(userId, diaryId)  // 쿼리 함수
     );
+    console.log(data);
     
     const onDeleteButtonClick = () => {
         deleteDiary(diaryId, userId);
@@ -58,15 +59,21 @@ export default function DiaryShow() {
                             )) : null}
                         </Box>}
                     </Box>
+                    {!isLoading ? 
                     <HStack justify="flex-end">
-                        <Link to={`/diary/edit/${diaryId}`}>
-                            <Button>수정</Button>
-                        </Link>
-                        <Button onClick={onDeleteButtonClick}>삭제</Button>
+                        {userId == data.user.id ? 
+                        <HStack>
+                            <Link to={`/diary/edit/${diaryId}`}>
+                                <Button>수정</Button>
+                            </Link>
+                            <Button onClick={onDeleteButtonClick}>삭제</Button>
+                        </HStack> 
+                        : null}
                         <Link to={`/diary/main`}>
                             <Button>목록</Button>
                         </Link>
                     </HStack>
+                    :null}
                 </Stack>
             </Flex>
         </>

@@ -14,7 +14,7 @@ export default function BorderShow() {
     const [isLLoading, setLIsLoading] = useState(true);
     const [likeDatas, setLikeDatas] = useState([]);
     const { boardId } = useParams();
-    const { register, handleSubmit, reset } = useForm({ defaultValues: { "cmPostId": boardId } });
+    const { register, handleSubmit } = useForm({ defaultValues: { "cmPostId": boardId } });
     const navigate = useNavigate();
 
     // 댓글 업로드 mutation

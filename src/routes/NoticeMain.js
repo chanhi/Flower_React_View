@@ -16,7 +16,7 @@ export default function NoticeMain() {
                     <Tr>
                     <Th>No.</Th>
                     <Th>제목</Th>
-                    <Th>작성자</Th>
+                    <Th></Th>
                     <Th isNumeric>날짜</Th>
                     </Tr>
                 </Thead>

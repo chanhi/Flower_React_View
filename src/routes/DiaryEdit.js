@@ -9,6 +9,9 @@ import {
     Text,
     useColorModeValue,
     Textarea,
+    RadioGroup,
+    HStack,
+    Radio,
   } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -18,7 +21,7 @@ import Cookie from "js-cookie";
 
 export default function DiaryEdit() {
     const {diaryId} = useParams();  
-    const {register, handleSubmit} = useForm();
+    const {register, handleSubmit, setValue} = useForm();
     const navigate = useNavigate();
     const userCookie = Cookie.get("userInfo");
     const userInfo = userCookie ? JSON.parse(userCookie) : null;
@@ -67,6 +70,25 @@ export default function DiaryEdit() {
                     type="text"
                     required
                 />
+              </FormControl>
+              <FormControl isRequired>
+                <FormLabel>공개 범위</FormLabel>
+                <RadioGroup defaultValue={data.disable ? '2' : '1'}>
+                  <HStack>
+                      <Radio 
+                        value='1' 
+                        {...register("disable", {required: true})}
+                        onChange={() => setValue("disable", false)}>
+                        공개
+                      </Radio>
+                      <Radio
+                        value='2'
+                        {...register("disable", {required: true})}
+                        onChange={() => setValue("disable", true)}>
+                      비공개
+                      </Radio>
+                  </HStack>
+                </RadioGroup>
               </FormControl>
               <FormControl id="photo">
                 <FormLabel>사진 등록</FormLabel>
