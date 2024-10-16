@@ -21,6 +21,8 @@ import DiaryPost from "./routes/DiaryPost";
 import DiaryShow from "./routes/DiaryShow";
 import DiaryEdit from "./routes/DiaryEdit";
 import FriendSearch from "./routes/FriendSearch";
+import AdminUser from "./routes/AdminUser";
+import AdminPlant from "./routes/AdminPlant";
 
 
 //---------------라우터 여기서 url에 따라 라우팅--------------------
@@ -119,6 +121,19 @@ const router = createBrowserRouter([
                     {
                         path: "show/:noticeId",
                         element: <NoticeShow />
+                    },
+                ]
+            },
+            {
+                path: "admin",
+                children: [
+                    {
+                        path: "user",
+                        element: <AdminUser />
+                    },
+                    {
+                        path: "plant",
+                        element: <AdminPlant />
                     },
                 ]
             },

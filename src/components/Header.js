@@ -206,7 +206,43 @@ const DesktopNav = ({role}) => {
           </Popover>
         </Box>
       ))}
-      {role ? NAV_ITEMS_CLIENT.map((navItem) => (
+      {role && role == "USER" ? NAV_ITEMS_CLIENT.map((navItem) => (
+        <Box key={navItem.label}>
+          <Popover trigger={'hover'} placement={'bottom-start'}>
+            <PopoverTrigger>
+              <Link
+                p={2}
+                href={navItem.href ?? '#'}
+                fontSize={'sm'}
+                fontWeight={500}
+                color={linkColor}
+                _hover={{
+                  textDecoration: 'none',
+                  color: linkHoverColor,
+                }}>
+                {navItem.label}
+              </Link>
+            </PopoverTrigger>
+
+            {navItem.children && (
+              <PopoverContent
+                border={0}
+                boxShadow={'xl'}
+                bg={popoverContentBgColor}
+                p={4}
+                rounded={'xl'}
+                minW={'sm'}>
+                <Stack>
+                  {navItem.children.map((child) => (
+                    <DesktopSubNav key={child.label} {...child} />
+                  ))}
+                </Stack>
+              </PopoverContent>
+            )}
+          </Popover>
+        </Box>
+      )): null}
+      {role && role == "ADMIN" ? NAV_ITEMS_ADMIN.map((navItem) => (
         <Box key={navItem.label}>
           <Popover trigger={'hover'} placement={'bottom-start'}>
             <PopoverTrigger>
@@ -354,12 +390,10 @@ const NAV_ITEMS_ALL = [
     children: [
       {
         label: '자유게시판',
-        subLabel: 'Trending Design to inspire you',
         href: "/board/main",
       },
       {
         label: '공지사항',
-        subLabel: 'Up-and-coming Designers',
         href: '/notice/main',
       },
     ],
@@ -372,12 +406,10 @@ const NAV_ITEMS_CLIENT = [
     children: [
       {
         label: '스트리밍',
-        subLabel: 'Find your dream design job',
         href: '/myplant',
       },
       {
         label: '내 일기장',
-        subLabel: 'An exclusive list for contract work',
         href: '/diary/main',
       },
     ],
@@ -385,5 +417,38 @@ const NAV_ITEMS_CLIENT = [
   {
     label: '친구',
     href: `/friend`,
+  },
+];
+
+const NAV_ITEMS_ADMIN = [
+  {
+    label: '내 식물',
+    children: [
+      {
+        label: '스트리밍',
+        href: '/myplant',
+      },
+      {
+        label: '내 일기장',
+        href: '/diary/main',
+      },
+    ],
+  },
+  {
+    label: '친구',
+    href: `/friend`,
+  },
+  {
+    label: '관리자',
+    children: [
+      {
+        label: '회원관리',
+        href: '/admin/user',
+      },
+      {
+        label: '식물관리',
+        href: '/admin/plant',
+      },
+    ],
   },
 ];

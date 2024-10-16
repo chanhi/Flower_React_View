@@ -9,9 +9,6 @@ import {
     Text,
     useColorModeValue,
     Textarea,
-    RadioGroup,
-    HStack,
-    Radio,
   } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -37,7 +34,6 @@ export default function DiaryEdit() {
         }
     })
     const onSubmit = (data) => {
-        console.log(data);
         mutation.mutate({variables: data, id: diaryId, userId: userId});
     };  
     
@@ -71,6 +67,7 @@ export default function DiaryEdit() {
                     required
                 />
               </FormControl>
+              {/*
               <FormControl isRequired>
                 <FormLabel>공개 범위</FormLabel>
                 <RadioGroup defaultValue={data.disable ? '2' : '1'}>
@@ -90,6 +87,7 @@ export default function DiaryEdit() {
                   </HStack>
                 </RadioGroup>
               </FormControl>
+              */}
               <FormControl id="photo">
                 <FormLabel>사진 등록</FormLabel>
                 <Input 

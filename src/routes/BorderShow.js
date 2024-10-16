@@ -5,6 +5,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { deleteBoard, deleteComment, postLike, uploadComment, uploadReComment } from "../api";
 import { useForm } from "react-hook-form";
 import { StarIcon } from "@chakra-ui/icons";
+import Cookie from "js-cookie";
 
 export default function BorderShow() {
     const [isLoading, setIsLoading] = useState(true);
@@ -16,6 +17,9 @@ export default function BorderShow() {
     const { boardId } = useParams();
     const { register, handleSubmit } = useForm({ defaultValues: { "cmPostId": boardId } });
     const navigate = useNavigate();
+    const userCookie = Cookie.get("userInfo");
+    const userInfo = userCookie ? JSON.parse(userCookie) : null;
+    const userId = userInfo.id;
 
     // 댓글 업로드 mutation
     const commentMutation = useMutation(uploadComment, {
@@ -54,7 +58,7 @@ export default function BorderShow() {
         fetchComment();
         fetchLike();
     }, []);
-    console.log(commentDatas);
+
     const likeMutaion = useMutation(postLike, {
         onSuccess: () => {
             window.location.reload();  // 성공 시 페이지 새로고침
@@ -140,16 +144,21 @@ export default function BorderShow() {
                         </Box>
                     </Stack>
                 </Box>
-
+                {!isLLoading ? 
                 <HStack justify="flex-end">
-                    <Link to={`/board/edit/${boardId}`}>
-                        <Button>수정</Button>
-                    </Link>
-                    <Button onClick={onDeleteButtonClick}>삭제</Button>
+                    {userId == datas.user.id ? 
+                    <HStack>
+                        <Link to={`/board/edit/${boardId}`}>
+                            <Button>수정</Button>
+                        </Link>
+                        <Button onClick={onDeleteButtonClick}>삭제</Button>
+                    </HStack>
+                    : null}
                     <Link to={`/board/main`}>
                         <Button>목록</Button>
                     </Link>
                 </HStack>
+                :null}
             </Stack>
         </Flex>
     );

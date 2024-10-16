@@ -1,9 +1,7 @@
-import { Box, Button, Divider, Flex, FormControl, HStack, Input, Spinner, Stack, Text, Textarea, useColorModeValue, useDisclosure } from "@chakra-ui/react";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { Box, Button, Flex, HStack, Stack, Text, useColorModeValue } from "@chakra-ui/react";
+import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { deleteDiary, getDiary } from "../api";
-import { StarIcon } from "@chakra-ui/icons";
 import Cookie from "js-cookie";
 
 export default function DiaryShow() {
@@ -16,7 +14,6 @@ export default function DiaryShow() {
         ['diaryData', userId, diaryId],  // 쿼리 키
         () => getDiary(userId, diaryId)  // 쿼리 함수
     );
-    console.log(data);
     
     const onDeleteButtonClick = () => {
         deleteDiary(diaryId, userId);

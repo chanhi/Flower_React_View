@@ -11,23 +11,25 @@ import {
     Button,
     Text,
     HStack,
+    border,
+    Stack,
+    Radio,
+    RadioGroup,
+    Heading,
 } from '@chakra-ui/react';
 import { Link, useParams } from 'react-router-dom';
 import HeatMap from 'react-heatmap-grid'
-import { addFriend, delFriend, getGrass, getHim, getRecentWriteBoard, getRecentWriteComment, isFriend } from '../api';
+import { addFriend, delFriend, editDiaryStatus, getGrass, getHim, getRecentWriteBoard, getRecentWriteComment, isFriend } from '../api';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import Cookie from "js-cookie";
   
 export default function MypageMain() {
   const xLabels = new Array(52).fill(0).map((_, i) => `${i}`);
-  const yLabels = ["일", "월", "화", "수", "목", "금", "토"];
-  //const test = new Array(365).fill(0);
-  const data = new Array(yLabels.length)
+  const yLabels = ["SUN", "MON", "TUS", "WED", "THR", "FRI", "SAT"];
+  const setData = new Array(yLabels.length)
   .fill(0)
-  .map(() =>
-    new Array(xLabels.length).fill(0).map(() => Math.floor(Math.random() * 100))
-  );
+  .map(() =>new Array(xLabels.length).fill(0));
 
   const {userId} = useParams();
   const userCookie = Cookie.get("userInfo");
@@ -38,7 +40,44 @@ export default function MypageMain() {
   const { isLoading: isCLoading, data: commentDatas } = useQuery(['commentDatas', userId], () => getRecentWriteComment(userId));
   const { isLoading: isULoading, data: userDatas } = useQuery(['userDatas', userId], () => getHim(userId));
   const { isLoading: isGLoading, data: grassData } = useQuery(['grassData', userId], () => getGrass(userId));
-  console.log(grassData);
+  const [heatmapData, setHeatmapData] = useState(setData);
+  
+  // 날짜를 x, y 좌표로 변환하는 함수
+  const getDayOfYear = (date) => {
+    const start = new Date(date.getFullYear(), 0, 0); // 그 해의 첫날
+    const diff = date - start + (start.getTimezoneOffset() - date.getTimezoneOffset()) * 60000; 
+    return Math.floor(diff / (1000 * 60 * 60 * 24)); // 연중 몇 번째 날인지 반환
+  };
+
+  // 데이터 변환 함수
+  const transformData = (jsonData) => {
+    const yearData = new Array(yLabels.length)
+      .fill(0)
+      .map(() => new Array(xLabels.length).fill(0));
+
+    jsonData.forEach((item) => {
+      const [year, month, day] = item.regdate;
+      const date = new Date(year, month - 1, day); // 월은 0부터 시작하기 때문에 -1
+      const dayOfYear = getDayOfYear(date);
+      
+      const weekIndex = Math.floor(dayOfYear / 7);  // 52주 중 몇 번째 주
+      const dayIndex = date.getDay(); // 요일 인덱스 (일요일: 0, 월요일: 1, ..., 토요일: 6)
+
+      // 해당 좌표에 count 값 넣기
+      if (weekIndex < xLabels.length) {
+        yearData[dayIndex][weekIndex] += item.count;  // 활동량을 더해줌
+      }
+    });
+
+    return yearData;
+  };
+
+  useEffect(() => {
+    if (grassData) {
+      const transformedData = transformData(grassData);  // 실제로는 API로 받아온 데이터
+      setHeatmapData(transformedData);
+    }
+  }, [grassData]);
 
   const addMutation = useMutation(addFriend, {
       onSuccess: () => {
@@ -66,10 +105,41 @@ export default function MypageMain() {
     delMutation.mutate(userId);
   };
 
+  const diaryMutaion = useMutation(editDiaryStatus, {
+      onSuccess: () => {
+          alert('변경되었습니다!');
+          window.location.reload();  // 성공 시 페이지 새로고침
+      },
+      onError: (error) => {
+          console.error('Error deleting comment:', error);
+      },
+  });
+
+  const handlelike = (code) => {
+    diaryMutaion.mutate(code);
+  };
+
+  const colorSeletor = (value) => {
+    if(value == 0){
+      return 'rgba(0, 0, 0, 0.05)';
+    } else if(value == 1){
+      return 'rgb(0, 208, 78, 0.5)'
+    } else {
+      return 'rgb(0, 208, 78, 1)'
+    }
+  }
+
   //---------------마이페이지 메인--------------------
   return (
       <Box m={20}>
-        <Text mt={10}>내가 쓴 게시글</Text>
+        {!isULoading ? 
+        <Box>
+          <span style={{fontSize: '40px', verticalAlign: 'bottom'}}>{userDatas.nickname}</span>
+          <span style={{fontSize: '20px', verticalAlign: 'bottom'}}> 님의 페이지</span>
+        </Box>
+        : null}
+        <Divider />
+        <Text mt={10}>최근 쓴 게시글</Text>
         <TableContainer>
           <Table variant='simple'>
             <Thead>
@@ -100,7 +170,7 @@ export default function MypageMain() {
   
         <Divider height={20} />
   
-        <Text>내가 쓴 댓글</Text>
+        <Text>최근 쓴 댓글</Text>
         <TableContainer>
           <Table variant='simple'>
             <Thead>
@@ -128,18 +198,48 @@ export default function MypageMain() {
             </Tbody>
           </Table>
         </TableContainer>
-        <HStack justifyContent="end">
+        <HStack marginTop={10} justifyContent="end">
           {userId == userInfo.id ? 
-            <Link to={`/mypage/${userId}/edit`}>
-              <Button>내 정보 수정</Button>
-            </Link>
+            <Stack alignItems={"flex-end"}>
+              <Text>일기장 공개 범위</Text>
+              <RadioGroup defaultValue={true ? '2' : '1'}>
+                  <HStack>
+                      <Radio value='2' >
+                        전체 공개
+                      </Radio>
+                      <Radio value='1' >
+                        친구 공개
+                      </Radio>
+                      <Radio value='0'>
+                        비공개
+                      </Radio>
+                  </HStack>
+              </RadioGroup>
+              <Divider></Divider>
+              <Link to={`/mypage/${userId}/edit`}>
+                <Button>내 정보 수정</Button>
+              </Link>
+          </Stack>
           : null}
             {userId == userInfo.id ? null : 
               isF ? <Button onClick={handleFriendDel}>친구 삭제</Button> : <Button onClick={handleFriendAdd}>친구 추가</Button>
             }
         </HStack>
         <Box mt={5}>
-            <HeatMap xLabels={xLabels} yLabels={yLabels} data={data} />
+          {!isGLoading ?
+            <HeatMap
+              xLabelsVisibility={true} 
+              xLabels={xLabels} 
+              yLabels={yLabels} 
+              yLabelWidth={50}
+              data={heatmapData} 
+              height={22}
+              cellStyle={(background, value, min, max, data, x, y) => ({
+                background: `${colorSeletor(value)}`,
+                fontSize: "11px",
+              })}
+            />
+            : null }
         </Box>
       </Box>
   )

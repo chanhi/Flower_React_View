@@ -219,3 +219,29 @@ export const editMyData = (variables) => {
     })
     .then((response) => response.data);
 }
+//일기장 활성화, 비활성화
+export const editDiaryStatus = (code) => instance.get(`usermanage/diary/${code}`).then((response)=>response.data);
+
+//------------------------------------ADMIN--------------------------------
+//유저리스트 요청
+export const getUser = () => instance.get("admin/getuserlist").then((response)=>response.data);
+//관리자 유저 수정
+export const userAdminUpdate  = (variables) => {
+    instance.post(`admin/update`, variables, {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    .then((response) => response.data);
+}
+//식물리스트 요청
+export const getPlant = () => instance.get("admin/plant/list").then((response)=>response.data);
+//식물 정보 수정
+export const plantAdminUpdate  = (variables) => {
+    instance.post(`admin/plant/update`, variables, {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    .then((response) => response.data);
+}
