@@ -11,11 +11,9 @@ import {
     Button,
     Text,
     HStack,
-    border,
     Stack,
     Radio,
     RadioGroup,
-    Heading,
 } from '@chakra-ui/react';
 import { Link, useParams } from 'react-router-dom';
 import HeatMap from 'react-heatmap-grid'
@@ -41,7 +39,8 @@ export default function MypageMain() {
   const { isLoading: isULoading, data: userDatas } = useQuery(['userDatas', userId], () => getHim(userId));
   const { isLoading: isGLoading, data: grassData } = useQuery(['grassData', userId], () => getGrass(userId));
   const [heatmapData, setHeatmapData] = useState(setData);
-  
+
+  //console.log(userDatas);
   // 날짜를 x, y 좌표로 변환하는 함수
   const getDayOfYear = (date) => {
     const start = new Date(date.getFullYear(), 0, 0); // 그 해의 첫날
@@ -108,15 +107,15 @@ export default function MypageMain() {
   const diaryMutaion = useMutation(editDiaryStatus, {
       onSuccess: () => {
           alert('변경되었습니다!');
-          window.location.reload();  // 성공 시 페이지 새로고침
+          //window.location.reload();  // 성공 시 페이지 새로고침
       },
       onError: (error) => {
           console.error('Error deleting comment:', error);
       },
   });
 
-  const handlelike = (code) => {
-    diaryMutaion.mutate(code);
+  const handleDiary = (value) => {
+    diaryMutaion.mutate(value);
   };
 
   const colorSeletor = (value) => {
@@ -199,22 +198,31 @@ export default function MypageMain() {
           </Table>
         </TableContainer>
         <HStack marginTop={10} justifyContent="end">
-          {userId == userInfo.id ? 
+          {!isULoading && userId == userInfo.id ? 
             <Stack alignItems={"flex-end"}>
-              <Text>일기장 공개 범위</Text>
-              <RadioGroup defaultValue={true ? '2' : '1'}>
-                  <HStack>
-                      <Radio value='2' >
-                        전체 공개
-                      </Radio>
-                      <Radio value='1' >
-                        친구 공개
-                      </Radio>
-                      <Radio value='0'>
-                        비공개
-                      </Radio>
-                  </HStack>
-              </RadioGroup>
+              <HStack>
+                <Box>
+                <Text>일기장 공개 범위</Text>
+                  <RadioGroup 
+                    onChange={(value) => {
+                      handleDiary(value);
+                    }} 
+                    defaultValue={`${userDatas.diaryispublic}`}>
+                      <HStack>
+                          <Radio value='2'>
+                            전체 공개
+                          </Radio>
+                          <Radio value='1'>
+                            친구 공개
+                          </Radio>
+                          <Radio value='0'>
+                            비공개
+                          </Radio>
+                      </HStack>
+                  </RadioGroup>
+                </Box>
+                
+              </HStack>
               <Divider></Divider>
               <Link to={`/mypage/${userId}/edit`}>
                 <Button>내 정보 수정</Button>

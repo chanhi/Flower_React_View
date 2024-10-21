@@ -50,7 +50,7 @@ export default function Header() {
   }
   const userCookie = Cookie.get("userInfo");
   const userInfo = userCookie ? JSON.parse(userCookie) : null;
-  //console.log(!isLoading?data:null);
+  
   //---------------헤더--------------------
   return (
     <Box>

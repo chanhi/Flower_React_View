@@ -37,10 +37,6 @@ export default function FriendSearch() {
                 </Tbody>
                 </Table>
             </TableContainer>
-            
-            <Link to="/diary/post">
-                <Button>일기장 등록</Button> 
-            </Link>
         </Stack>
     )
 }

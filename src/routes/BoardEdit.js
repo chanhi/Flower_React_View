@@ -12,7 +12,7 @@ import {
   } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { editBoard } from '../api';
 import { useEffect, useState } from 'react';
 
@@ -22,14 +22,15 @@ export default function BoardEdit() {
     const {boardId} = useParams();  
     const {register, handleSubmit} = useForm();
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
     const mutation = useMutation(editBoard, {
         onSuccess: (data) => {
+            queryClient.invalidateQueries(["boardList"]);
             navigate('/board/main', {replace: true});
             //window.location.replace("/board/main");
         }
     })
     const onSubmit = (data) => {
-        console.log(data);
         mutation.mutate({variables: data, id: boardId});
     };  
     const fetchData = async () => {

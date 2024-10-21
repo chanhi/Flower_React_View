@@ -1,4 +1,4 @@
-import { Box, Button, Grid, HStack, Progress, Stack, Text } from "@chakra-ui/react";
+import { Box, Button, Grid, HStack, Progress, Stack } from "@chakra-ui/react";
 import { getActuator } from "../api";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";

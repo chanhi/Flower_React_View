@@ -1,16 +1,24 @@
 import { Box, Button, Input, InputGroup, InputLeftElement, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, VStack } from "@chakra-ui/react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { FaLock, FaUserNinja } from "react-icons/fa";
 import { logIn } from "../api";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginModal({isOpen, onClose}) {
     const {register, handleSubmit, reset} = useForm();
+    const navigate = useNavigate();
+    const queryClient = useQueryClient();
     const mutation = useMutation(logIn ,{
       onSuccess: (data) => {
-        onClose();
+        onClose()
         reset();
+        queryClient.invalidateQueries(["me"]);
       },
+      onError: (error) => {
+        onClose();
+        console.log(error);
+      }
     })
     const onSubmit = (data) => {
       console.log(data);

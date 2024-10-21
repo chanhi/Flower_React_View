@@ -190,7 +190,12 @@ export const logIn = (variables) => {
             'Content-Type': 'application/json',
         },
     })
-    .then((response) => response.data);
+    .then((response) => response.data)
+    .catch((error) => {
+        alert(error.response.data);
+        // 에러 처리
+        throw error;  // 에러를 다시 던져서 onError로 전달
+    });
 }
 
 export const logOut = () => {

@@ -97,6 +97,7 @@ export default function BorderShow() {
     return (
         <Flex minH={'100vh'} justify={'center'} bg={useColorModeValue('gray.50', 'gray.800')}>
             <Stack spacing={8} mx={'auto'} w="100%" py={12} px={6}>
+                {!isLoading ? 
                 <HStack justify="space-between" px={5}>
                     <Text fontSize={'lg'} color={'gray.600'}>
                         제목: {datas.title}
@@ -106,9 +107,9 @@ export default function BorderShow() {
                         <Text>작성일: {datas.regdate}</Text>
                     </HStack>
                 </HStack>
-
+                : null}
                 <Box rounded={'lg'} bg={useColorModeValue('white', 'gray.700')} boxShadow={'sm'} p={8}>
-                    {datas.content}
+                    {!isLoading ? datas.content : null}
                     {datas.pictureBase64List ? datas.pictureBase64List.map((picture) => (
                         <img src={"data:image/jpeg;base64," + picture} alt="게시글 이미지" />
                     )) : null}
@@ -121,7 +122,6 @@ export default function BorderShow() {
                         </Button>
                     </Stack>
                 </Box>
-
                 <Box rounded={'lg'} bg={useColorModeValue('white', 'gray.700')} boxShadow={'sm'} p={8}>
                     <Box>댓글</Box>
                     <HStack as="form" mb={7} id="commentForm" onSubmit={handleSubmit(onSubmit)}>
@@ -144,7 +144,7 @@ export default function BorderShow() {
                         </Box>
                     </Stack>
                 </Box>
-                {!isLLoading ? 
+                {!isLLoading && !isLoading ? 
                 <HStack justify="flex-end">
                     {userId == datas.user.id ? 
                     <HStack>

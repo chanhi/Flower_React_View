@@ -8,7 +8,7 @@ import Cookie from "js-cookie";
 export default function DiaryMain() {
     const userCookie = Cookie.get("userInfo");
     const userInfo = userCookie ? JSON.parse(userCookie) : null;
-    const { isLoading, data } = useQuery(['diaryData', userInfo.id], () => getDiariesList(userInfo.id));
+    const { isLoading, data } = useQuery(['diaryDatas', userInfo.id], () => getDiariesList(userInfo.id));
     
     //---------------게시글 리스트 페이지--------------------
     return(

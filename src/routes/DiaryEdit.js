@@ -12,7 +12,7 @@ import {
   } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { editDiary, getDiary } from '../api';
 import Cookie from "js-cookie";
 
@@ -20,6 +20,7 @@ export default function DiaryEdit() {
     const {diaryId} = useParams();  
     const {register, handleSubmit, setValue} = useForm();
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
     const userCookie = Cookie.get("userInfo");
     const userInfo = userCookie ? JSON.parse(userCookie) : null;
     const userId = userInfo.id;
@@ -29,6 +30,7 @@ export default function DiaryEdit() {
     );
     const mutation = useMutation(editDiary, {
         onSuccess: (data) => {
+            queryClient.invalidateQueries(["diaryDatas"]);
             navigate('/diary/main', {replace: true});
             //window.location.replace("/board/main");
         }

@@ -12,14 +12,16 @@ import {
   } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { uploadDiary } from '../api';
 
 export default function DiaryPost() {
     const {register, handleSubmit} = useForm();
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
     const mutation = useMutation(uploadDiary, {
         onSuccess: (data) => {
+            queryClient.invalidateQueries(["diaryDatas"]);
             navigate('/diary/main', {replace: true});
             //window.location.replace("/board/main");
             //오류가 너무 생김 너무 일찌 리로딩 해서 생기는 문제 같은데
