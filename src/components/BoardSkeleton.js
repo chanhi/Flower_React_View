@@ -1,4 +1,4 @@
-import { Box, Skeleton, Td, Tr } from "@chakra-ui/react";
+import { Skeleton, Td, Tr } from "@chakra-ui/react";
 
 export default function BoradSkeleton() {
     return(

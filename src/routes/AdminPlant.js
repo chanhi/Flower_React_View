@@ -11,7 +11,7 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { getPlant, plantAdminUpdate } from "../api"; // 가정된 API 함수
+import { getPlant, plantAdminUpdate } from "../api";
 
 export default function AdminPlant() {
   // 식물 리스트 가져오기

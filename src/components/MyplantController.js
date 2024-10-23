@@ -13,7 +13,7 @@ export default function MyplantController(sensorData) {
       };
     const udpMutation = useMutation(getActuator, {
         onSuccess: (data) => {
-            console.log(data);
+            //console.log(data);
         },
         onError: (error) => {
             console.error('Error deleting comment:', error);

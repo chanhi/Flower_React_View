@@ -30,10 +30,9 @@ export default function MypageEdit() {
   const {register, handleSubmit} = useForm();
   
   const { isLoading: isMLoading, data: myData } = useQuery(['myData'], getEditMyData);
-  console.log(myData);
   const mutation = useMutation(editMyData ,{
     onSuccess: (data) => {
-      window.location.replace("/");
+      //window.location.replace("/");
     }
   })
   const onSubmit = (data) => {
@@ -82,9 +81,6 @@ export default function MypageEdit() {
             <Heading fontSize={'4xl'} textAlign={'center'}>
               개인정보 수정
             </Heading>
-            <Text fontSize={'lg'} color={'gray.600'}>
-              
-            </Text>
           </Stack>
           <Box
             rounded={'lg'}
@@ -187,6 +183,14 @@ export default function MypageEdit() {
                   type="text"
                 />
               </FormControl>
+              <FormControl id="iid">
+                <Input 
+                  {...register("id", {required: false})}
+                  value={myData.id}
+                  type="text"
+                  hidden
+                />
+              </FormControl>
               <Stack spacing={10} pt={2}>
                 <Button
                   loadingText="Submitting"
@@ -198,13 +202,8 @@ export default function MypageEdit() {
                     bg: 'blue.500',
                   }}
                   isDisabled={!isFormValid}>
-                  Sign up
+                  수정
                 </Button>
-              </Stack>
-              <Stack pt={6}>
-                <Text align={'center'}>
-                  Already a user? <Link color={'blue.400'}>Login</Link>
-                </Text>
               </Stack>
             </Stack>
             : null }

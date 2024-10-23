@@ -107,7 +107,6 @@ export default function MypageMain() {
   const diaryMutaion = useMutation(editDiaryStatus, {
       onSuccess: () => {
           alert('변경되었습니다!');
-          //window.location.reload();  // 성공 시 페이지 새로고침
       },
       onError: (error) => {
           console.error('Error deleting comment:', error);

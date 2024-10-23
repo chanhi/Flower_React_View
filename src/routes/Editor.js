@@ -1,7 +1,6 @@
 import React, { useRef, useState } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@chakra-ui/react";
 import { uploadBoard } from "../api";

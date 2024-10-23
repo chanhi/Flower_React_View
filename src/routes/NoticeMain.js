@@ -3,9 +3,12 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { getAnnounceList } from "../api";
 import BoradSkeleton from "../components/BoardSkeleton";
+import Cookie from "js-cookie";
 
 export default function NoticeMain() {
     const {isLoading, data} = useQuery(["noticeList"], getAnnounceList);
+    const userCookie = Cookie.get("userInfo");
+    const userInfo = userCookie ? JSON.parse(userCookie) : null;
 
     //---------------게시글 리스트 페이지--------------------
     return(
@@ -17,7 +20,6 @@ export default function NoticeMain() {
                     <Th>No.</Th>
                     <Th>제목</Th>
                     <Th></Th>
-                    <Th isNumeric>날짜</Th>
                     </Tr>
                 </Thead>
                 <Tbody>
@@ -40,10 +42,11 @@ export default function NoticeMain() {
                 </Tbody>
                 </Table>
             </TableContainer>
-            
+            {userInfo.role == "ADMIN" ? 
             <Link to="/notice/post">
                 <Button>공지사항 등록</Button> 
             </Link>
+            : null}
         </Stack>
     )
 }

@@ -5,7 +5,7 @@ export default function NotFound() {
   return (
     <VStack bg="gray.100" justifyContent={"center"} minH="100vh">
       <Heading>Page not found.</Heading>
-      <Text>It seems that you're lost.</Text>
+      <Text>죄송합니다. 페이지를 찾을 수 없습니😴</Text>
       <Link to="/">
         <Button colorScheme={"red"} variant={"link"}>
           Go Home &rarr;

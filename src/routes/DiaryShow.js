@@ -10,7 +10,7 @@ export default function DiaryShow() {
     const userCookie = Cookie.get("userInfo");
     const userInfo = userCookie ? JSON.parse(userCookie) : null;
     const userId = userInfo.id;
-    const { isLoading, data, error } = useQuery(
+    const { isLoading, data } = useQuery(
         ['diaryData', userId, diaryId],  // 쿼리 키
         () => getDiary(userId, diaryId)  // 쿼리 함수
     );

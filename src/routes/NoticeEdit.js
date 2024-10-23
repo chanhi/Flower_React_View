@@ -12,7 +12,7 @@ import {
   } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { editNotice } from '../api';
 import { useEffect, useState } from 'react';
 
@@ -22,14 +22,14 @@ export default function NoticeEdit() {
     const {noticeId} = useParams();  
     const {register, handleSubmit} = useForm();
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
     const mutation = useMutation(editNotice, {
         onSuccess: (data) => {
+            queryClient.invalidateQueries(["noticeList"]);
             navigate('/notice/main', {replace: true});
-            //window.location.replace("/board/main");
         }
     })
     const onSubmit = (data) => {
-        console.log(data);
         mutation.mutate({variables: data, id: noticeId});
     };  
     const fetchData = async () => {

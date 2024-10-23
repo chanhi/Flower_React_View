@@ -18,13 +18,13 @@ import Cookie from "js-cookie";
 
 export default function DiaryEdit() {
     const {diaryId} = useParams();  
-    const {register, handleSubmit, setValue} = useForm();
+    const {register, handleSubmit} = useForm();
     const navigate = useNavigate();
     const queryClient = useQueryClient();
     const userCookie = Cookie.get("userInfo");
     const userInfo = userCookie ? JSON.parse(userCookie) : null;
     const userId = userInfo.id;
-    const { isLoading, data, error } = useQuery(
+    const { isLoading, data } = useQuery(
         ['diaryData', userId, diaryId],  // 쿼리 키
         () => getDiary(userId, diaryId)  // 쿼리 함수
     );

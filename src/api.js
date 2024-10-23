@@ -6,7 +6,7 @@ const instance = axios.create({
     baseURL: "http://localhost:8081/api/",
     withCredentials: true,
 });
-//유저 정보 요청
+//유저 정보 요청 -> 백에서 세션 확인해서 로그인 안되면 쿠키 등록 안됨
 export const getMe = () => instance.get("session-login/info")
 .then((response) => {
     const userData = response.data;
@@ -193,8 +193,8 @@ export const logIn = (variables) => {
     .then((response) => response.data)
     .catch((error) => {
         alert(error.response.data);
-        // 에러 처리
-        throw error;  // 에러를 다시 던져서 onError로 전달
+        window.location.reload();
+        throw error;
     });
 }
 

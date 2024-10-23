@@ -3,11 +3,9 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { FaLock, FaUserNinja } from "react-icons/fa";
 import { logIn } from "../api";
-import { useNavigate } from "react-router-dom";
 
 export default function LoginModal({isOpen, onClose}) {
     const {register, handleSubmit, reset} = useForm();
-    const navigate = useNavigate();
     const queryClient = useQueryClient();
     const mutation = useMutation(logIn ,{
       onSuccess: (data) => {
@@ -21,7 +19,6 @@ export default function LoginModal({isOpen, onClose}) {
       }
     })
     const onSubmit = (data) => {
-      console.log(data);
       mutation.mutate(data);
     };  
     return(

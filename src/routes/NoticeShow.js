@@ -30,7 +30,6 @@ export default function NoticeShow() {
         deleteNotice(noticeId);
         navigate('/notice/main');
     }
-    console.log(userInfo);
     //---------------게시글 상세 페이지--------------------
     return(
         <>

@@ -22,7 +22,7 @@ export default function AdminUser() {
   const [nicknameChecked, setNicknameChecked] = useState({});
   const toast = useToast();
 
-  // 사용자 목록 가져오기 (React Query)
+  // 사용자 목록 가져오기
   const { data, isError, isLoading } = useQuery(["users"], getUser, {
     onSuccess: (data) => {
       setUsers(data);

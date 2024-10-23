@@ -14,10 +14,9 @@ import {
     useColorModeValue,
     Link,
   } from '@chakra-ui/react';
-  import { useState } from 'react';
-  import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
+import { useState } from 'react';
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { useForm } from 'react-hook-form';
-//import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { signUp, usernameCheck, nicknameCheck } from '../api';
   
@@ -36,7 +35,6 @@ import { signUp, usernameCheck, nicknameCheck } from '../api';
       }
     })
     const onSubmit = (data) => {
-      console.log(data);
       mutation.mutate(data);
     };  
     
@@ -176,11 +174,6 @@ import { signUp, usernameCheck, nicknameCheck } from '../api';
                   }}>
                   Sign up
                 </Button>
-              </Stack>
-              <Stack pt={6}>
-                <Text align={'center'}>
-                  Already a user? <Link color={'blue.400'}>Login</Link>
-                </Text>
               </Stack>
             </Stack>
           </Box>

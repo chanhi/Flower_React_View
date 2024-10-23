@@ -103,6 +103,7 @@ export default function BorderShow() {
                         제목: {datas.title}
                     </Text>
                     <HStack>
+                        <Text>작성자: {datas.user.nickname}</Text>:
                         <Text>좋아요: {likeDatas}</Text>:
                         <Text>작성일: {datas.regdate}</Text>
                     </HStack>
@@ -139,6 +140,7 @@ export default function BorderShow() {
                                     key={comment.id} 
                                     comment={comment} 
                                     boardId={boardId}
+                                    userId={userId}
                                 />
                             ))}
                         </Box>
@@ -165,7 +167,7 @@ export default function BorderShow() {
 }
 
 // 재귀적으로 댓글과 대댓글을 렌더링하는 컴포넌트
-function RecursiveComment({ comment, boardId }) {
+function RecursiveComment({ comment, boardId, userId }) {
     const deleteCommentMutation = useMutation(deleteComment, {
         onSuccess: () => {
             window.location.reload();  // 성공 시 페이지 새로고침
@@ -185,11 +187,13 @@ function RecursiveComment({ comment, boardId }) {
             {!comment.disable ? 
             <HStack justifyContent={"space-between"}>
                 <Box>{comment.content}</Box>
+                {userId == comment.user.id ? 
                 <HStack>
                     <Box>{comment.regdate}</Box>
                     <Button size="sm">수정</Button>
                     <Button size="sm" color={"red"} onClick={() => handleDeleteComment(comment.id)}>삭제</Button>
                 </HStack>
+                : null}
             </HStack>
             :
             <HStack justifyContent={"space-between"}>
@@ -204,7 +208,7 @@ function RecursiveComment({ comment, boardId }) {
             {comment.recomments && comment.recomments.length > 0 && comment.recomments.map((recomment) => (
                 <HStack key={recomment.id}>
                     <Box w={10}></Box> {/* 대댓글 들여쓰기 */}
-                    <RecursiveComment comment={recomment} boardId={boardId} />
+                    <RecursiveComment comment={recomment} boardId={boardId} userId={userId} />
                 </HStack>
             ))}
         </Stack>
@@ -222,8 +226,6 @@ function ReCommentForm({ comment, boardId }) {
       }
     })
     const handleReCommentSubmit = (data) => {
-        // 대댓글 전송 로직
-        console.log("대댓글 작성:", data, "부모 댓글 ID:", comment.id);
         const payload = {variables: data, id: comment.id};
         reMutation.mutate(payload);
         reset();
