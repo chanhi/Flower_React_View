@@ -45,7 +45,7 @@ export default function Home() {
               </Td>
               <Td>
                 <Link to={`/mypage/${data.user.id}/main`}>
-                  {data.user.name}
+                  {data.user.nickname}
                 </Link>
               </Td>
               <Td isNumeric>{data.regdate}</Td>

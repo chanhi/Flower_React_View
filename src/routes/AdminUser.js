@@ -18,8 +18,8 @@ export default function AdminUser() {
   const [users, setUsers] = useState([]);
   const [originalLoginId, setOriginalLoginId] = useState({});
   const [originalNickname, setOriginalNickname] = useState({});
-  const [loginIdChecked, setLoginIdChecked] = useState({});
-  const [nicknameChecked, setNicknameChecked] = useState({});
+  const [loginIdChecked, setLoginIdChecked] = useState({}); // 기본값 true로 설정
+  const [nicknameChecked, setNicknameChecked] = useState({}); // 기본값 true로 설정
   const toast = useToast();
 
   // 사용자 목록 가져오기
@@ -34,8 +34,14 @@ export default function AdminUser() {
       });
       setOriginalLoginId(loginIdMap);
       setOriginalNickname(nicknameMap);
-      setLoginIdChecked({});
-      setNicknameChecked({});
+
+      // 각 사용자에 대해 기본적으로 true로 설정
+      const initialCheckMap = data.reduce((acc, user) => {
+        acc[user.id] = true;
+        return acc;
+      }, {});
+      setLoginIdChecked(initialCheckMap);
+      setNicknameChecked(initialCheckMap);
     },
   });
 
@@ -48,6 +54,7 @@ export default function AdminUser() {
         duration: 3000,
         isClosable: true,
       });
+      window.location.reload();
     },
     onError: () => {
       toast({
@@ -61,71 +68,71 @@ export default function AdminUser() {
 
   const checkDuplicateLoginId = async (userId) => {
     const loginId = document.getElementById(`loginId-${userId}`).value;
-    if (loginId != originalLoginId[userId]) {
+    if (loginId === originalLoginId[userId]) {
+      setLoginIdChecked((prev) => ({ ...prev, [userId]: true }));
       toast({
-        title: "사용가능한 ID 입니다.",
-        status: "success",
+        title: "ID is unchanged, no need to check.",
+        status: "info",
         duration: 2000,
         isClosable: true,
       });
-      setLoginIdChecked((prev) => ({ ...prev, [userId]: true }));
       return;
     }
 
-    const response = await usernameCheck(userId);
+    const response = await usernameCheck(loginId);
     const data = await response;
 
-    if (!data.isDuplicate) {
+    if (data.isDuplicate) {
+      setLoginIdChecked((prev) => ({ ...prev, [userId]: false }));
       toast({
-        title: "이미 사용중인 ID 입니다.",
+        title: "This ID is already in use.",
         status: "error",
         duration: 2000,
         isClosable: true,
       });
-      setLoginIdChecked((prev) => ({ ...prev, [userId]: false }));
     } else {
+      setLoginIdChecked((prev) => ({ ...prev, [userId]: true }));
       toast({
-        title: "사용가능한 ID 입니다.",
+        title: "ID is available.",
         status: "success",
         duration: 2000,
         isClosable: true,
       });
-      setLoginIdChecked((prev) => ({ ...prev, [userId]: true }));
     }
   };
 
   const checkDuplicateNickname = async (userId) => {
     const nickname = document.getElementById(`nickname-${userId}`).value;
-    if (nickname != originalNickname[userId]) {
+    if (nickname === originalNickname[userId]) {
+      setNicknameChecked((prev) => ({ ...prev, [userId]: true }));
       toast({
-        title: "사용가능한 닉네임입니다.",
-        status: "success",
+        title: "Nickname is unchanged, no need to check.",
+        status: "info",
         duration: 2000,
         isClosable: true,
       });
-      setNicknameChecked((prev) => ({ ...prev, [userId]: true }));
       return;
     }
 
-    const response = await nicknameCheck(userId);
+    const response = await nicknameCheck(nickname);
     const data = await response;
 
-    if (!data.isDuplicate) {
+    if (data.isDuplicate) {
+      setNicknameChecked((prev) => ({ ...prev, [userId]: false }));
       toast({
-        title: "사용중인 닉네임입니다.",
+        title: "This nickname is already in use.",
         status: "error",
         duration: 2000,
         isClosable: true,
       });
-      setNicknameChecked((prev) => ({ ...prev, [userId]: false }));
     } else {
+      setNicknameChecked((prev) => ({ ...prev, [userId]: true }));
       toast({
-        title: "사용가능한 닉네임입니다.",
+        title: "Nickname is available.",
         status: "success",
         duration: 2000,
         isClosable: true,
       });
-      setNicknameChecked((prev) => ({ ...prev, [userId]: true }));
     }
   };
 
@@ -170,14 +177,22 @@ export default function AdminUser() {
             <Tr key={user.id}>
               <Td>{user.id}</Td>
               <Td>
-                <Input id={`loginId-${user.id}`} defaultValue={user.loginId} />
+                <Input
+                  onChange={() => setLoginIdChecked((prev) => ({ ...prev, [user.id]: false }))}
+                  id={`loginId-${user.id}`}
+                  defaultValue={user.loginId}
+                />
                 <Button onClick={() => checkDuplicateLoginId(user.id)}>Check</Button>
               </Td>
               <Td>
                 <Input id={`password-${user.id}`} defaultValue={user.password} />
               </Td>
               <Td>
-                <Input id={`nickname-${user.id}`} defaultValue={user.nickname} />
+                <Input
+                  onChange={() => setNicknameChecked((prev) => ({ ...prev, [user.id]: false }))}
+                  id={`nickname-${user.id}`}
+                  defaultValue={user.nickname}
+                />
                 <Button onClick={() => checkDuplicateNickname(user.id)}>Check</Button>
               </Td>
               <Td>

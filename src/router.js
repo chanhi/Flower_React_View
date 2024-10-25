@@ -94,7 +94,7 @@ const router = createBrowserRouter([
                         element: <DiaryEdit />
                     },
                     {
-                        path: "main",
+                        path: "main/:userId",
                         element: <DiaryMain />
                     },
                     {

@@ -15,6 +15,7 @@ import {
   useBreakpointValue,
   useDisclosure,
   useColorMode,
+  useToast,
 } from '@chakra-ui/react';
 import {
   HamburgerIcon,
@@ -30,6 +31,7 @@ import { getMe, logOut } from '../api';
 import Cookie from "js-cookie";
 
 export default function Header() {
+  const toast = useToast();
   const { isOpen, onToggle } = useDisclosure();
   const { colorMode, toggleColorMode } = useColorMode();
   const {
@@ -42,6 +44,12 @@ export default function Header() {
   });
   const mutation = useMutation(logOut, {
     onSuccess: () => {
+      toast({
+        title: "Logout Success",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
       window.location.replace("/");
     }
   })
@@ -130,6 +138,16 @@ export default function Header() {
           spacing={6}>
           <Button onClick={toggleColorMode}>
             {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
+          </Button>
+          <Button
+            as={'a'}
+            fontSize={'sm'}
+            fontWeight={400}
+            backgroundColor={'green.400'}
+            color={'white'}
+            href={`/diary/main/${userInfo.id}`}
+          >
+            일기장
           </Button>
           <Button
             as={'a'}
@@ -403,16 +421,7 @@ const NAV_ITEMS_ALL = [
 const NAV_ITEMS_CLIENT = [
   {
     label: '내 식물',
-    children: [
-      {
-        label: '스트리밍',
-        href: '/myplant',
-      },
-      {
-        label: '내 일기장',
-        href: '/diary/main',
-      },
-    ],
+    href: '/myplant',
   },
   {
     label: '친구',
@@ -423,16 +432,7 @@ const NAV_ITEMS_CLIENT = [
 const NAV_ITEMS_ADMIN = [
   {
     label: '내 식물',
-    children: [
-      {
-        label: '스트리밍',
-        href: '/myplant',
-      },
-      {
-        label: '내 일기장',
-        href: '/diary/main',
-      },
-    ],
+    href: '/myplant',
   },
   {
     label: '친구',

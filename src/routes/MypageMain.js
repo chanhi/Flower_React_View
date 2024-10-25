@@ -131,13 +131,20 @@ export default function MypageMain() {
   return (
       <Box m={20}>
         {!isULoading ? 
-        <Box>
-          <span style={{fontSize: '40px', verticalAlign: 'bottom'}}>{userDatas.nickname}</span>
-          <span style={{fontSize: '20px', verticalAlign: 'bottom'}}> 님의 페이지</span>
-        </Box>
+        <HStack justifyContent={'space-between'}>
+          <Box>
+            <span style={{fontSize: '40px', verticalAlign: 'bottom'}}>{userDatas.nickname}</span>
+            <span style={{fontSize: '20px', verticalAlign: 'bottom'}}> 님의 페이지</span>
+          </Box>
+          <Link to={`/diary/main/${userDatas.id}`}>
+            <Button>일기장</Button>
+          </Link>
+        </HStack>
+        
         : null}
         <Divider />
         <Text mt={10}>최근 쓴 게시글</Text>
+        {!isBLoading && ! isULoading ? 
         <TableContainer>
           <Table variant='simple'>
             <Thead>
@@ -154,7 +161,6 @@ export default function MypageMain() {
                 <Td>{data.id}</Td>
                 <Td>
                   <Link to={`/board/show/${data.id}`}>{data.title}</Link>
-                  {/*아이디 기준으로 해당 게시글로 이동하도록 prop 설정해야 됨*/}
                 </Td>
                 <Td>
                   {userDatas.nickname}
@@ -165,10 +171,12 @@ export default function MypageMain() {
             </Tbody>
           </Table>
         </TableContainer>
+        : null}
   
         <Divider height={20} />
   
         <Text>최근 쓴 댓글</Text>
+        {!isBLoading && ! isULoading ? 
         <TableContainer>
           <Table variant='simple'>
             <Thead>
@@ -196,6 +204,7 @@ export default function MypageMain() {
             </Tbody>
           </Table>
         </TableContainer>
+        : null}
         <HStack marginTop={10} justifyContent="end">
           {!isULoading && userId == userInfo.id ? 
             <Stack alignItems={"flex-end"}>

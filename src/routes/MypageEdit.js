@@ -24,8 +24,8 @@ export default function MypageEdit() {
   const [showPassword, setShowPassword] = useState(false);
   const [usernameResult, setUsernameResult] = useState();
   const [nicknameResult, setNicknameResult] = useState();
-  const [checkUserName, setCheckUserName] = useState(false);
-  const [checkNickName, setCheckNickName] = useState(false);
+  const [checkUserName, setCheckUserName] = useState(true);
+  const [checkNickName, setCheckNickName] = useState(true);
   const [isFormValid, setIsFormValid] = useState(false);
   const {register, handleSubmit} = useForm();
   
@@ -45,10 +45,10 @@ export default function MypageEdit() {
   
   const onUsernameCheckBtnClick = async () => {
     const username = document.getElementById("userNameInput").value;
-    const result = usernameCheck(username);
+    const result = await usernameCheck(username);
     const json = await result;
     setCheckUserName(json.isDuplicate);
-    {!checkUserName ? setUsernameResult("you can use it") : setUsernameResult("you can't use it")}
+    setUsernameResult(json.isDuplicate ? "you can't use it" : "you can use it");
   }
 
   const onNicknameCheckBtnClick = async () => {
@@ -56,17 +56,19 @@ export default function MypageEdit() {
     const result = nicknameCheck(nickname);
     const json = await result;
     setCheckNickName(json.isDuplicate);
-    {!checkNickName ? setNicknameResult("you can use it") : setNicknameResult("you can't use it")}
+    setNicknameResult(json.isDuplicate ? "you can't use it" : "you can use it");
   }
 
   const handleUsernameChange = () => {
-    setCheckUserName(false);
-    setUsernameResult('');
+    setCheckUserName(true);
+    setUsernameResult();
+    setIsFormValid(false);
   };
 
   const handleNicknameChange = () => {
-    setCheckNickName(false);
-    setNicknameResult('');
+    setCheckNickName(true);
+    setNicknameResult();
+    setIsFormValid(false);
   };
 
     //---------------내 정보 수정 페이지--------------------

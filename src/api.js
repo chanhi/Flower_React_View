@@ -140,7 +140,10 @@ export const getGrass = (userId) => instance.get(`mypage/${userId}/grassdata`).t
 
 //----------------------------------일기장----------------------------------
 //일기장 리스트 요청
-export const getDiariesList = (id) => instance.get(`diaries/${id}`).then((response)=>response.data);
+export const getDiariesList = (id) => instance.get(`diaries/${id}`).then((response)=>response.data)
+.catch((error) => {
+    throw error;
+});
 //일기장 요청
 export const getDiary = (userId, diaryId) => instance.get(`diaries/${userId}/${diaryId}`).then((response)=>response.data);
 //일기장 업로드

@@ -1,14 +1,15 @@
-import { Button, Stack, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import { Button, Heading, Stack, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { getDiariesList } from "../api";
 import BoradSkeleton from "../components/BoardSkeleton";
 import Cookie from "js-cookie";
 
 export default function DiaryMain() {
+    const {userId} = useParams();
+    const { isLoading, data, error } = useQuery(['diaryDatas', userId], () => getDiariesList(userId));
     const userCookie = Cookie.get("userInfo");
     const userInfo = userCookie ? JSON.parse(userCookie) : null;
-    const { isLoading, data } = useQuery(['diaryDatas', userInfo.id], () => getDiariesList(userInfo.id));
     
     //---------------게시글 리스트 페이지--------------------
     return(
@@ -39,13 +40,16 @@ export default function DiaryMain() {
                             <Td>{data.regdate}</Td>
                         </Tr>
                     ))}
+                    {error ? <Heading>권한이 없습니다</Heading> : null}
+                    
                 </Tbody>
                 </Table>
             </TableContainer>
-            
+            {userInfo.id == userId ? 
             <Link to="/diary/post">
                 <Button>일기장 등록</Button> 
             </Link>
+            :null}
         </Stack>
     )
 }

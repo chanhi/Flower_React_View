@@ -118,7 +118,7 @@ export default function BorderShow() {
                         <Button w={100} h={20} onClick={handlelike}>
                             <Stack align="center">
                                 <StarIcon />
-                                <Text>좋아요</Text>
+                                <Text>좋아요 {likeDatas}</Text>
                             </Stack>
                         </Button>
                     </Stack>

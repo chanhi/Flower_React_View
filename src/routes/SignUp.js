@@ -14,7 +14,7 @@ import {
     useColorModeValue,
     Link,
   } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
@@ -24,8 +24,9 @@ import { signUp, usernameCheck, nicknameCheck } from '../api';
     const [showPassword, setShowPassword] = useState(false);
     const [usernameResult, setUsernameResult] = useState();
     const [nicknameResult, setNicknameResult] = useState();
-    const [checkUserName, setCheckUserName] = useState(false);
-    const [checkNickName, setCheckNickName] = useState(false);
+    const [checkUserName, setCheckUserName] = useState(true);
+    const [checkNickName, setCheckNickName] = useState(true);
+    const [isFormValid, setIsFormValid] = useState(false);
     const {register, handleSubmit} = useForm();
     //const navigate = useNavigate();
     const mutation = useMutation(signUp ,{
@@ -43,7 +44,7 @@ import { signUp, usernameCheck, nicknameCheck } from '../api';
       const result = usernameCheck(username);
       const json = await result;
       setCheckUserName(json.isDuplicate);
-      {checkUserName ? setUsernameResult("you can use it") : setUsernameResult("you can't use it")}
+      setUsernameResult(json.isDuplicate ? "you can't use it" : "you can use it");
     }
 
     const onNicknameCheckBtnClick = async () => {
@@ -51,8 +52,24 @@ import { signUp, usernameCheck, nicknameCheck } from '../api';
       const result = nicknameCheck(nickname);
       const json = await result;
       setCheckNickName(json.isDuplicate);
-      {checkNickName ? setNicknameResult("you can use it") : setNicknameResult("you can't use it")}
+      setNicknameResult(json.isDuplicate ? "you can't use it" : "you can use it");
     }
+
+    const handleUsernameChange = () => {
+      setCheckUserName(true);
+      setUsernameResult();
+      setIsFormValid(false);
+    };
+  
+    const handleNicknameChange = () => {
+      setCheckNickName(true);
+      setNicknameResult();
+      setIsFormValid(false);
+    };
+
+    useEffect(() => {
+      setIsFormValid(!checkUserName && !checkNickName);
+    }, [checkUserName, checkNickName]);
 
     return (
       <Flex
@@ -87,6 +104,7 @@ import { signUp, usernameCheck, nicknameCheck } from '../api';
                       type="text"
                       required
                       id='userNameInput'
+                      onChange={handleUsernameChange}
                     />
                   </FormControl>
                   <Button onClick={onUsernameCheckBtnClick}>중복확인</Button>
@@ -135,6 +153,7 @@ import { signUp, usernameCheck, nicknameCheck } from '../api';
                     type="text"
                     required
                     id='nickNameInput'
+                    onChange={handleNicknameChange}
                   />
                 </FormControl>
                 <Button onClick={onNicknameCheckBtnClick}>중복확인</Button>
@@ -164,6 +183,7 @@ import { signUp, usernameCheck, nicknameCheck } from '../api';
               </FormControl>
               <Stack spacing={10} pt={2}>
                 <Button
+                  isDisabled={!isFormValid}
                   loadingText="Submitting"
                   type='submit'
                   size="lg"

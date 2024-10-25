@@ -9,6 +9,7 @@ import {
   Td,
   Input,
   Button,
+  useToast,
 } from "@chakra-ui/react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { getPlant, plantAdminUpdate } from "../api";
@@ -16,13 +17,25 @@ import { getPlant, plantAdminUpdate } from "../api";
 export default function AdminPlant() {
   // 식물 리스트 가져오기
   const { data: plants, isLoading } = useQuery(["getPlantList"], getPlant);
+  const toast = useToast();
 
   const plantMutation = useMutation(plantAdminUpdate, {
     onSuccess: () => {
-      alert("Plant updated successfully");
+      toast({
+        title: "Plant data updated successfully.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+      window.location.reload();
     },
     onError: () => {
-      alert("Failed to update plant");
+      toast({
+        title: "Failed to update plant.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     },
   });
 

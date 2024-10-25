@@ -1,4 +1,4 @@
-import { Box, Button, Input, InputGroup, InputLeftElement, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, VStack } from "@chakra-ui/react";
+import { Box, Button, Input, InputGroup, InputLeftElement, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, useToast, VStack } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { FaLock, FaUserNinja } from "react-icons/fa";
@@ -7,8 +7,15 @@ import { logIn } from "../api";
 export default function LoginModal({isOpen, onClose}) {
     const {register, handleSubmit, reset} = useForm();
     const queryClient = useQueryClient();
+    const toast = useToast();
     const mutation = useMutation(logIn ,{
       onSuccess: (data) => {
+        toast({
+            title: "Login Success!!",
+            status: "success",
+            duration: 4000,
+            isClosable: true,
+          });
         onClose()
         reset();
         queryClient.invalidateQueries(["me"]);
