@@ -32,6 +32,7 @@ export default function MypageMain() {
   const {userId} = useParams();
   const userCookie = Cookie.get("userInfo");
   const userInfo = userCookie ? JSON.parse(userCookie) : null;
+  const userInfoId = userInfo ? userInfo.id : 0;
 
   const { isLoading: isFLoading, data: isF } = useQuery(['isF', userId], () => isFriend(userId));
   const { isLoading: isBLoading, data: boardDatas } = useQuery(['boardDatas', userId], () => getRecentWriteBoard(userId));
@@ -118,9 +119,9 @@ export default function MypageMain() {
   };
 
   const colorSeletor = (value) => {
-    if(value == 0){
+    if(value === 0){
       return 'rgba(0, 0, 0, 0.05)';
-    } else if(value == 1){
+    } else if(value === 1){
       return 'rgb(0, 208, 78, 0.5)'
     } else {
       return 'rgb(0, 208, 78, 1)'
@@ -206,7 +207,7 @@ export default function MypageMain() {
         </TableContainer>
         : null}
         <HStack marginTop={10} justifyContent="end">
-          {!isULoading && userId == userInfo.id ? 
+          {!isULoading && userId === userInfoId ? 
             <Stack alignItems={"flex-end"}>
               <HStack>
                 <Box>
@@ -237,8 +238,10 @@ export default function MypageMain() {
               </Link>
           </Stack>
           : null}
-            {userId == userInfo.id ? null : 
-              isF ? <Button onClick={handleFriendDel}>친구 삭제</Button> : <Button onClick={handleFriendAdd}>친구 추가</Button>
+            {userInfoId === 0 ? null : 
+              userId === userInfoId ? null : 
+                isF ? <Button onClick={handleFriendDel}>친구 삭제</Button> : 
+                <Button onClick={handleFriendAdd}>친구 추가</Button>
             }
         </HStack>
         <Box mt={5}>

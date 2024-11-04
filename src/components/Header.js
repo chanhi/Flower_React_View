@@ -224,7 +224,7 @@ const DesktopNav = ({role}) => {
           </Popover>
         </Box>
       ))}
-      {role && role == "USER" ? NAV_ITEMS_CLIENT.map((navItem) => (
+      {role && role === "USER" ? NAV_ITEMS_CLIENT.map((navItem) => (
         <Box key={navItem.label}>
           <Popover trigger={'hover'} placement={'bottom-start'}>
             <PopoverTrigger>
@@ -260,7 +260,7 @@ const DesktopNav = ({role}) => {
           </Popover>
         </Box>
       )): null}
-      {role && role == "ADMIN" ? NAV_ITEMS_ADMIN.map((navItem) => (
+      {role && role === "ADMIN" ? NAV_ITEMS_ADMIN.map((navItem) => (
         <Box key={navItem.label}>
           <Popover trigger={'hover'} placement={'bottom-start'}>
             <PopoverTrigger>
