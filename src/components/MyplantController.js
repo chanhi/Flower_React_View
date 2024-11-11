@@ -1,11 +1,13 @@
-import { Box, Button, Grid, HStack, Progress, Stack } from "@chakra-ui/react";
+import { Box, Button, Center, Grid, HStack, Progress, Stack } from "@chakra-ui/react";
 import { getActuator } from "../api";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
+import { FaSmile, FaLaughBeam, FaFrown } from "react-icons/fa"
 
 export default function MyplantController(sensorData) {
-    const datas = sensorData.datas.sensorData;
-    const ip = sensorData.ip.ip;
+    //const datas = sensorData.datas.sensorData;
+    const datas = [10, 20, 10, 20, 100];
+    const ip = '' //sensorData.ip.ip;
     const [isOn, setisOn] = useState(false);
     const toggleHandler = () => {
         // isOn의 상태를 변경하는 메소드를 구현
@@ -26,6 +28,15 @@ export default function MyplantController(sensorData) {
     };
     return(
         <Stack>
+            <Stack alignItems={'center'}>
+                {datas[4] >= 0 && datas[4] < 50 ?
+                <FaFrown color="green" size={50} /> :
+                    datas[4] >= 50 && datas[4] < 90 ? 
+                    <FaSmile color="green" size={50} /> 
+                    : <FaLaughBeam color="green" size={50} />
+                }
+                
+            </Stack>
             <Grid gap={2} templateColumns={"2fr 2fr"} mt={10}>
                 <Button onClick={() => handleActuator('rotater')}>회전</Button>
                 <Button as={'a'} href="http://175.123.202.85:20800/screenshot">캡쳐</Button>

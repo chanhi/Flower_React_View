@@ -1,8 +1,9 @@
-import { Box, Flex, Skeleton, Stack} from "@chakra-ui/react";
+import { Box, Center, Flex, Skeleton, Spinner, Stack} from "@chakra-ui/react";
 import MyplantController from "../components/MyplantController";
 import { getIPAddress, getSensorData } from "../api";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+import StreamSkeleton from "../components/StreamSkeleton";
 
 export default function MyPlant() {
     const { isLoading: isIPLoading, data: ip } = useQuery(['ip'], getIPAddress);
@@ -21,19 +22,30 @@ export default function MyPlant() {
     //---------------내 식물 페이지--------------------
       return (
         <>
-          <Flex p={10}>
-            <Stack alignItems="center" justifyContent="center" mr={10}>
-              <Box bgColor={"green.400"} w="100%">
+          <Flex p={10} minH={400}>
+            <Stack w={'100%'} alignItems={'space-between'} justifyContent="center" mr={10}>
+              {isSLoading ? 
+              <Stack minW={300} alignItems={'center'}>
+                <Spinner 
+                  size={'xl'} 
+                  thickness='4px'
+                  speed='0.65s'
+                  emptyColor='gray.200'
+                  color='blue.500'
+                />
+              </Stack>
+              : 
+              <Stack w="100%" minW={300}>
                 <img src="http://175.123.202.85:20800/stream.mjpg" alt="" />
-              </Box>
+              </Stack>
+              } 
             </Stack>
-            <Box width={200} height={200}>
+            <Box minW={200} minH={380}>
               {isSLoading ? (
                 <>
-                  <Skeleton height='20px' />
+                  <StreamSkeleton />
                 </>
               ) : <MyplantController datas={sensorData} ip={ip} />}
-            
             </Box>
           </Flex>
         </>
