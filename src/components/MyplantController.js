@@ -1,4 +1,4 @@
-import { Box, Button, Center, Grid, HStack, Progress, Stack } from "@chakra-ui/react";
+import { Box, Button, Grid, HStack, Progress, Stack } from "@chakra-ui/react";
 import { getActuator } from "../api";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
@@ -28,15 +28,6 @@ export default function MyplantController(sensorData) {
     };
     return(
         <Stack>
-            <Stack alignItems={'center'}>
-                {datas[4] >= 0 && datas[4] < 50 ?
-                <FaFrown color="green" size={50} /> :
-                    datas[4] >= 50 && datas[4] < 90 ? 
-                    <FaSmile color="green" size={50} /> 
-                    : <FaLaughBeam color="green" size={50} />
-                }
-                
-            </Stack>
             <Grid gap={2} templateColumns={"2fr 2fr"} mt={10}>
                 <Button onClick={() => handleActuator('rotater')}>회전</Button>
                 <Button as={'a'} href="http://175.123.202.85:20800/screenshot">캡쳐</Button>
@@ -52,7 +43,7 @@ export default function MyplantController(sensorData) {
                     </Button>
             </Grid>
             {datas ? 
-            <Box>
+            <Stack>
                 <HStack mt={10}>
                     <Box w={50} textAlign={'center'} bg='tomato' borderRadius={'lg'}>온도</Box>
                     <Box>: {datas[1]}</Box>
@@ -65,15 +56,21 @@ export default function MyplantController(sensorData) {
                 <Progress hasStripe value={datas[2]} />
                 <HStack>
                     <Box w={50} textAlign={'center'} bg='tomato' borderRadius={'lg'}>조도</Box>
-                    <Box>: {datas[3]}%</Box>
+                    <Stack alignItems={'center'}>
+                        {datas[3] >= 0 && datas[3] < 50 ?
+                        <FaFrown color="green" size={40} /> :
+                            datas[3] >= 50 && datas[3] < 90 ? 
+                            <FaSmile color="green" size={40} /> 
+                            : <FaLaughBeam color="green" size={40} />
+                        }
+                    </Stack>
                 </HStack>
-                <Progress hasStripe value={datas[3]} />
                 <HStack>
                     <Box w={50} textAlign={'center'} bg='tomato' borderRadius={'lg'}>일조량</Box>
                     <Box>: {datas[4]}/100</Box>
                 </HStack>
                 <Progress hasStripe value={datas[4]} />
-            </Box>
+            </Stack>
             : null}
         </Stack>
     );

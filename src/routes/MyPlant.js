@@ -1,4 +1,4 @@
-import { Box, Center, Flex, Skeleton, Spinner, Stack} from "@chakra-ui/react";
+import { Box, HStack, Spinner, Stack} from "@chakra-ui/react";
 import MyplantController from "../components/MyplantController";
 import { getIPAddress, getSensorData } from "../api";
 import { useQuery } from "@tanstack/react-query";
@@ -22,8 +22,8 @@ export default function MyPlant() {
     //---------------내 식물 페이지--------------------
       return (
         <>
-          <Flex p={10} minH={400}>
-            <Stack w={'100%'} alignItems={'space-between'} justifyContent="center" mr={10}>
+          <HStack p={10} minH={400}>
+            <Stack w={'100%'} justifyContent="center" mr={10}>
               {isSLoading ? 
               <Stack minW={300} alignItems={'center'}>
                 <Spinner 
@@ -35,8 +35,10 @@ export default function MyPlant() {
                 />
               </Stack>
               : 
-              <Stack w="100%" minW={300}>
-                <img src="http://175.123.202.85:20800/stream.mjpg" alt="" />
+              <Stack w={"100%"} minW={300}>
+                <Box>
+                  <img src="http://175.123.202.85:20800/stream.mjpg" alt="" />
+                </Box>
               </Stack>
               } 
             </Stack>
@@ -47,7 +49,7 @@ export default function MyPlant() {
                 </>
               ) : <MyplantController datas={sensorData} ip={ip} />}
             </Box>
-          </Flex>
+          </HStack>
         </>
       )
 }
