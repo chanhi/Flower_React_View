@@ -13,15 +13,15 @@ export default function DiaryMain() {
     
     //---------------게시글 리스트 페이지--------------------
     return(
-        <Stack>
+        <Stack mx={100} mt={10}>
             <TableContainer>
                 <Table variant='simple'>
                 <Thead>
                     <Tr>
-                    <Th>No.</Th>
-                    <Th>제목</Th>
-                    <Th>작성자</Th>
-                    <Th>날짜</Th>
+                    <Th w={'10%'}>No.</Th>
+                    <Th w={'55%'}>제목</Th>
+                    <Th textAlign={'center'}>작성자</Th>
+                    <Th textAlign={'center'}>날짜</Th>
                     </Tr>
                 </Thead>
                 <Tbody>
@@ -32,12 +32,12 @@ export default function DiaryMain() {
                     ) : null}
                     {data?.map((data)=>(
                         <Tr key={data.id}>
-                            <Td>{data.id}</Td>
+                            <Td textAlign={'center'}>{data.id}</Td>
                             <Td>
                                 <Link to={`/diary/show/${data.id}`}>{data.title}</Link>
                             </Td>
                             <Td>{data.user.nickname}</Td>
-                            <Td>{data.regdate}</Td>
+                            <Td textAlign={'center'}>{data.regdate}</Td>
                         </Tr>
                     ))}
                     {error ? <Heading>권한이 없습니다</Heading> : null}
@@ -46,9 +46,11 @@ export default function DiaryMain() {
                 </Table>
             </TableContainer>
             {userInfo.id == userId ? 
-            <Link to="/diary/post">
-                <Button>일기장 등록</Button> 
-            </Link>
+            <Stack my={5} alignItems={'flex-end'}>
+                <Link to="/diary/post">
+                    <Button>일기장 등록</Button> 
+                </Link>
+            </Stack>
             :null}
         </Stack>
     )

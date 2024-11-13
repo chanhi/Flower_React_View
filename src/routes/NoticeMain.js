@@ -12,14 +12,14 @@ export default function NoticeMain() {
 
     //---------------게시글 리스트 페이지--------------------
     return(
-        <Stack>
+        <Stack mx={100} mt={10}>
             <TableContainer>
                 <Table variant='simple'>
                 <Thead>
                     <Tr>
-                    <Th>No.</Th>
-                    <Th>제목</Th>
-                    <Th></Th>
+                    <Th w={'10%'}>No.</Th>
+                    <Th w={'55%'}>제목</Th>
+                    <Th>내용</Th>
                     </Tr>
                 </Thead>
                 <Tbody>
@@ -30,7 +30,7 @@ export default function NoticeMain() {
                     ) : null}
                     {data?.map((data)=>(
                         <Tr key={data.id}>
-                            <Td>{data.id}</Td>
+                            <Td textAlign={'center'}>{data.id}</Td>
                             <Td>
                                 <Link to={`/notice/show/${data.id}`}>{data.title}</Link>
                                 {/*아이디 기준으로 해당 게시글로 이동하도록 prop 설정해야 됨*/}
@@ -43,9 +43,11 @@ export default function NoticeMain() {
                 </Table>
             </TableContainer>
             {userInfo.role == "ADMIN" ? 
-            <Link to="/notice/post">
-                <Button>공지사항 등록</Button> 
-            </Link>
+            <Stack alignItems={'flex-end'} my={5}>
+                <Link to="/notice/post">
+                    <Button>공지사항 등록</Button> 
+                </Link>
+            </Stack>
             : null}
         </Stack>
     )

@@ -41,7 +41,6 @@ export default function MypageMain() {
   const { isLoading: isGLoading, data: grassData } = useQuery(['grassData', userId], () => getGrass(userId));
   const [heatmapData, setHeatmapData] = useState(setData);
 
-  //console.log(userDatas);
   // 날짜를 x, y 좌표로 변환하는 함수
   const getDayOfYear = (date) => {
     const start = new Date(date.getFullYear(), 0, 0); // 그 해의 첫날
@@ -119,9 +118,9 @@ export default function MypageMain() {
   };
 
   const colorSeletor = (value) => {
-    if(value === 0){
+    if(value == 0){
       return 'rgba(0, 0, 0, 0.05)';
-    } else if(value === 1){
+    } else if(value == 1){
       return 'rgb(0, 208, 78, 0.5)'
     } else {
       return 'rgb(0, 208, 78, 1)'
@@ -207,7 +206,7 @@ export default function MypageMain() {
         </TableContainer>
         : null}
         <HStack marginTop={10} justifyContent="end">
-          {!isULoading && userId === userInfoId ? 
+          {!isULoading && userId == userInfoId ? 
             <Stack alignItems={"flex-end"}>
               <HStack>
                 <Box>
@@ -238,8 +237,8 @@ export default function MypageMain() {
               </Link>
           </Stack>
           : null}
-            {userInfoId === 0 ? null : 
-              userId === userInfoId ? null : 
+            {userInfoId == 0 ? null : 
+              userId == userInfoId ? null : 
                 isF ? <Button onClick={handleFriendDel}>친구 삭제</Button> : 
                 <Button onClick={handleFriendAdd}>친구 추가</Button>
             }

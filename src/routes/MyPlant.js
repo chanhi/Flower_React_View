@@ -42,7 +42,7 @@ export default function MyPlant() {
               </Stack>
               } 
             </Stack>
-            <Box minW={200} minH={380}>
+            <Box w={'40%'} minW={200} minH={380}>
               {isSLoading ? (
                 <>
                   <StreamSkeleton />

@@ -18,17 +18,18 @@ export default function Home() {
   //--------------------------메인 페이지--------------------------------
   const {data: bData, isLoading: bLoading} = useQuery(["boardList"], getBoardRecentList);
   const {data: aData, isLoading: aLoading} = useQuery(["noticeList"], getAnnounceRecentList);
+  console.log(aData);
   
   return (
-    <Box m={10}>
+    <Box mx={100} mt={10}>
       <TableContainer>
         <Table variant='simple'>
-          <Thead>
+          <Thead borderBottomWidth={2}>
             <Tr>
-              <Th>No.</Th>
-              <Th>제목</Th>
-              <Th>작성자</Th>
-              <Th isNumeric>날짜</Th>
+              <Th w={'10%'}>No.</Th>
+              <Th w={'55%'}>제목</Th>
+              <Th textAlign={'center'}>작성자</Th>
+              <Th textAlign={'center'}>날짜</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -48,7 +49,7 @@ export default function Home() {
                   {data.user.nickname}
                 </Link>
               </Td>
-              <Td isNumeric>{data.regdate}</Td>
+              <Td textAlign={'center'}>{data.regdate}</Td>
             </Tr>
             ))}
           </Tbody>
@@ -61,8 +62,8 @@ export default function Home() {
         <Table variant='simple'>
           <Thead>
             <Tr>
-              <Th>No.</Th>
-              <Th>제목</Th>
+              <Th w={'10%'}>No.</Th>
+              <Th w={'55%'}>제목</Th>
               <Th>내용</Th>
             </Tr>
           </Thead>
@@ -78,7 +79,7 @@ export default function Home() {
               <Td>
                 <Link to={`/notice/show/${data.id}`}>{data.title}</Link>
               </Td>
-              <Td>{data.content}</Td>
+              <Td>{data.content.length > 20 ? `${data.content.slice(0, 20)}...` : data.content}</Td>
             </Tr>
             ))}
           </Tbody>

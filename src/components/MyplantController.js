@@ -5,9 +5,8 @@ import { useMutation } from "@tanstack/react-query";
 import { FaSmile, FaLaughBeam, FaFrown } from "react-icons/fa"
 
 export default function MyplantController(sensorData) {
-    //const datas = sensorData.datas.sensorData;
-    const datas = [10, 20, 10, 20, 100];
-    const ip = '' //sensorData.ip.ip;
+    const datas = sensorData.datas.sensorData;
+    const ip = sensorData.ip.ip;
     const [isOn, setisOn] = useState(false);
     const toggleHandler = () => {
         // isOn의 상태를 변경하는 메소드를 구현
@@ -27,7 +26,7 @@ export default function MyplantController(sensorData) {
         udpMutation.mutate({type: type, ip: ip});
     };
     return(
-        <Stack>
+        <Stack w={'100%'}>
             <Grid gap={2} templateColumns={"2fr 2fr"} mt={10}>
                 <Button onClick={() => handleActuator('rotater')}>회전</Button>
                 <Button as={'a'} href="http://175.123.202.85:20800/screenshot">캡쳐</Button>
